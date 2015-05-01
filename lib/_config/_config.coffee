@@ -1,5 +1,5 @@
 @Config =
-	name: 'My App'
+	name: '中农天时智慧农场'
 	title: ->
 			TAPi18n.__ 'configTitle'
 	subtitle: ->
