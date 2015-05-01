@@ -36,3 +36,13 @@ Router.map ->
       if not Config.username or (Meteor.userId() and Meteor.user().username)
         @redirect '/dashboard'
       @next()
+
+  @route "postSubmitMap",
+    path: "/postSubmitMap"
+
+  @route "postSubmit",
+    path: "/postSubmit"
+    waitOn: ->
+      [
+        Meteor.subscribe 'posts'
+      ]

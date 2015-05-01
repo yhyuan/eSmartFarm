@@ -1,5 +1,5 @@
 @Config =
-	name: '中农天时智慧农场'
+	name: '华农天时i农场'
 	title: ->
 			TAPi18n.__ 'configTitle'
 	subtitle: ->
@@ -18,6 +18,10 @@
 
 	defaultLanguage: 'zh-CN'
 	dateFormat: 'D/M/YYYY'
+	mapDivID: 'map_canvas'
+	defaultLatitude: 39.56349
+	defaultLongitude: 117.55405
+	defaultZoomLevel: 13
 
 	socialMedia:
 		facebook:

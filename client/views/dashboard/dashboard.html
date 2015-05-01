@@ -2,7 +2,7 @@
 	<div class="container">
 		<div class="row" id="champion-messages">
 			<div class="col-md-3">
-				{{> add}}
+				{{> addPostButton}}
 				{{> favorites}}
 			</div>
 			<div class="col-md-9">
@@ -12,8 +12,11 @@
 	</div>
 </template>
 
+<template name="addPostButton">
+	<a href="{{pathFor 'postSubmit'}}">{{_ "add_post_btn"}}</a>
+</template>
 
-<template name="add">
+<template name="postSubmit">
 	<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title">{{_ "add_post"}}</h3>
@@ -22,11 +25,52 @@
 				{{#autoForm id="add" collection="Posts" type="insert"}}
 				{{> afQuickField name="title"}}
 				{{> afQuickField name="content"}}
-				{{> afQuickField name="picture"}}
+<!--				{{> afQuickField name="picture"}}
+				{{> afQuickField style="display: none;" name="geometry"}}
+				<a href="{{pathFor 'postSubmitMap'}}" id='postSubmitMapURL'>{{_ "next"}}</a>-->
+				{{#if addFieldStepIs "firstStep"}}
+					<div id="message"> {{_ "findLocationMessage"}} <input type="submit" value="{{_ "start"}}" class="btn btn-success btn-sm" id='addFieldStartButton'/></div>
+				{{/if}}
+				{{#if addFieldStepIs "secondStep"}}
+					<div id="message"> {{_ "tapMapMessage"}}</div>
+				{{/if}}
+				{{#if addFieldStepIs "thirdStep"}}
+					<div id="message"> {{_ "tapMapMessage"}} <input type="submit" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/></div>
+				{{/if}}
+				{{#if addFieldStepIs "fourthStep"}}
+					<div id="message"> {{_ "tapOriginalMessage"}} <input type="submit" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/></div>
+				{{/if}}
+				{{#if addFieldStepIs "fifthStep"}}
+					<div id="message"> {{_ "dragPointsMessage"}} <input type="submit" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/> <input type="submit" value="{{_ "done"}}" class="btn btn-primary btn-sm" id='addFieldDoneButton'/></div>
+				{{/if}}
+    			{{> map}}
 				<button type="submit" class="btn btn-primary">{{_ "add_post_btn"}}</button>
 				{{/autoForm}}
 			</div>
 	</div>
+</template>
+
+<template name="postSubmitMap">
+	{{#if addFieldStepIs "firstStep"}}
+		<div id="message"> {{_ "findLocationMessage"}} <input type="submit" value="{{_ "start"}}" class="btn btn-success btn-sm" id='addFieldStartButton'/></div>
+	{{/if}}
+	{{#if addFieldStepIs "secondStep"}}
+		<div id="message"> {{_ "tapMapMessage"}}</div>
+	{{/if}}
+	{{#if addFieldStepIs "thirdStep"}}
+		<div id="message"> {{_ "tapMapMessage"}} <input type="submit" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/></div>
+	{{/if}}
+	{{#if addFieldStepIs "fourthStep"}}
+		<div id="message"> {{_ "tapOriginalMessage"}} <input type="submit" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/></div>
+	{{/if}}
+	{{#if addFieldStepIs "fifthStep"}}
+		<div id="message"> {{_ "dragPointsMessage"}} <input type="submit" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/> <input type="submit" value="{{_ "done"}}" class="btn btn-primary btn-sm" id='addFieldDoneButton'/></div>
+	{{/if}}
+	{{> map}}
+</template>
+
+<template name="map">
+    <div id="{{divID}}" class="map"></div>
 </template>
 
 <template name="addWithModal">
@@ -41,49 +85,53 @@
 </template>
 
 <template name="posts">
-	{{#each orderByFavorites Posts}}
-		<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">
-						{{title}}
-						<span class="pull-right">
-							<i class="fa fa-thumbs-up"></i> {{favoriteCount _id}}
-							<i class="fa fa-comments"></i> {{commentCount _id}}
-						</span>
-					</h3>
-				</div>
-				<div class="panel-body">
-					<p class="text-center">
-						{{#with getDoc picture 'Attachments'}}
-							<img src="{{url}}" class="img-thumbnail img-rounded">
-						{{/with}}
-					</p>
-					<div class="media">
-						<a class="pull-left" href="#">
-							{{> profileThumb _id=owner}}
-						</a>
-						<div class="media-body">
-							<p>{{content}}</p>
-							{{#if $eq owner User._id}}
-							<small>
-								{{#afModal title="Update post" omitFields="createdAt,updatedAt,owner" class="text-primary" collection="Posts" operation="update" doc=_id}}
-									<i class="fa fa-pencil" buttonContent="Edit post"></i> {{_ "edit_post"}}
-								{{/afModal}}
-								{{#afModal title="Delete post" class="text-danger" collection="Posts" operation="remove" doc=_id}}
-									<i class="fa fa-times" buttonContent="Edit post"></i> {{_ "delete"}}
-								{{/afModal}}
-							</small>
-							{{/if}}
+	{{#if isPostsZero}}
+    	<p class="text-left">{{_ "no_post_message"}}</p>
+    {{else}}
+		{{#each orderByFavorites Posts}}
+			<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							{{title}}
+							<span class="pull-right">
+								<i class="fa fa-thumbs-up"></i> {{favoriteCount _id}}
+								<i class="fa fa-comments"></i> {{commentCount _id}}
+							</span>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<p class="text-center">
+							{{#with getDoc picture 'Attachments'}}
+								<img src="{{url}}" class="img-thumbnail img-rounded">
+							{{/with}}
+						</p>
+						<div class="media">
+							<a class="pull-left" href="#">
+								{{> profileThumb _id=owner}}
+							</a>
+							<div class="media-body">
+								<p>{{content}}</p>
+								{{#if $eq owner User._id}}
+								<small>
+									{{#afModal title="Update post" omitFields="createdAt,updatedAt,owner" class="text-primary" collection="Posts" operation="update" doc=_id}}
+										<i class="fa fa-pencil" buttonContent="Edit post"></i> {{_ "edit_post"}}
+									{{/afModal}}
+									{{#afModal title="Delete post" class="text-danger" collection="Posts" operation="remove" doc=_id}}
+										<i class="fa fa-times" buttonContent="Edit post"></i> {{_ "delete"}}
+									{{/afModal}}
+								</small>
+								{{/if}}
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="panel-footer">
-					{{> favoriteButton _id=_id}}
-					{{> commentFormToggle }}
-					{{> comments}}
-				</div>
-		</div>
-	{{/each}}
+					<div class="panel-footer">
+						{{> favoriteButton _id=_id}}
+						{{> commentFormToggle }}
+						{{> comments}}
+					</div>
+			</div>
+		{{/each}}
+	{{/if}}
 </template>
 
 <template name="favorites">

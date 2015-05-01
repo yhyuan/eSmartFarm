@@ -1,14 +1,49 @@
 @Posts = new Meteor.Collection('posts');
+Schemas.Geocoords = new SimpleSchema
+	lng:
+		type:Number
+		decimal: true
+		min: -180
+		max: 180
+
+	lat:
+		type:Number
+		decimal: true
+		min: -90
+		max: 90
+
+Schemas.Point = new SimpleSchema
+	type:
+		type:String
+		autoValue:  ->
+			"Point"
+	coordinate:
+		type: Schemas.Geocoords
+
+Schemas.Polygon = new SimpleSchema
+	type:
+		type: String
+		autoValue:  ->
+			"Polygon"
+	coordinates:
+		type: [[Schemas.Geocoords]]
 
 Schemas.Posts = new SimpleSchema
 	title:
 		type:String
+		label:  ->
+			TAPi18n.__ 'farmName'
 		max: 60
+
+	geometry:
+		type: Schemas.Polygon
 
 	content:
 		type: String
+		label:  ->
+			TAPi18n.__ 'farmDescription'
 		autoform:
-			rows: 5
+			rows: 2
 
 	createdAt: 
 		type: Date
@@ -25,6 +60,8 @@ Schemas.Posts = new SimpleSchema
 
 	picture:
 		type: String
+		label:  ->
+			TAPi18n.__ 'picture'
 		autoform:
 			afFieldInput:
 				type: 'fileUpload'
