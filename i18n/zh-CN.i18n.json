@@ -1,12 +1,12 @@
 {
 
 	/*Config*/
-	"configName": "My App",
-	"configTitle": "Make Meteor Apps. Fast.",
-	"configSubtitle": "Create beautiful and functioning Meteor apps really quick",
+	"configName": "中农天时智慧农场",
+	"configTitle": "智慧农场",
+	"configSubtitle": "创建农业美好未来",
 	
 	/*Home*/
-	"getstarted": "Get Started",
+	"getstarted": "开始",
 	"dashboard": "Go to dashboard",
 	"learn": "Learn more",
 	"intro": "Make Meteor Apps. Fast.",
@@ -28,17 +28,17 @@
 	"favorite": "Favorite",
 
 	 /*Navbar*/
-	"admin": "Admin",
-	"profile": "Profile",
-	"account": "Account",
-	"signout": "Sign out",
-	"signup": "Sign up",
-	"login": "Log in",
-	"login2": "Login",
-	"edit_profile": "Edit Profile",
+	"admin": "管理",
+	"profile": "资料",
+	"account": "账户",
+	"signout": "退出",
+	"signup": "注册",
+	"login": "登陆",
+	"login2": "登陆",
+	"edit_profile": "编辑账户资料",
 
 	/*Not Found*/
-	"not_found": "Nothing here.",
+	"not_found": "对不起，没有找到您需要的内容。",
 
 
 	/*Dashboard*/
@@ -51,15 +51,15 @@
 	"favorites": "Favorites",
 
 	/*Account*/
-	"account_details": "Account Details",
-	"delete_account": "Delete Account",
-	"delete_account_warn": "There's no coming back from this one",
-	"delete_account_warn2": "Are you sure you want to delete your account?",
-	"close": "Close",
-	"change_pswd": "Change Password",
+	"account_details": "账户细节",
+	"delete_account": "删除账户",
+	"delete_account_warn": "此账户被删除后，将无法恢复",
+	"delete_account_warn2": "您确认你要删除您的账户",
+	"close": "关闭",
+	"change_pswd": "改变密码",
 
 	/*Profile*/
-	"update": "Update",
+	"update": "更新",
 
 	/*Posts*/
 

@@ -16,7 +16,7 @@
 	homeRoute: '/'
 	dashboardRoute: '/dashboard'
 
-	defaultLanguage: 'en'
+	defaultLanguage: 'zh-CN'
 	dateFormat: 'D/M/YYYY'
 
 	socialMedia:
