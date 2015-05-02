@@ -37,9 +37,6 @@ Router.map ->
         @redirect '/dashboard'
       @next()
 
-  @route "postSubmitMap",
-    path: "/postSubmitMap"
-
   @route "postSubmit",
     path: "/postSubmit"
     waitOn: ->

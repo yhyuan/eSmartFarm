@@ -7,22 +7,7 @@ Template.posts.helpers({
 Template.postSubmit.helpers({
     addFieldStepIs: function(step) {
         return Session.get("addFieldStep") === step;
-    }
-});
-
-Template.postSubmit.events({
-    'click #postSubmitMapURL' : function(event, template){
-        //console.log(event);
-        //console.log(template);
-        var title = $('[name="title"]').val();//template.find('[name=title]').val();
-        var content = $('[name="content"]').val();//template.find('[name=content]').val();
-        var picture = $('[name="picture"]').val();//template.find('[name=picture]').val();
-        console.log($('[name="title"]'));
-        console.log($('[name="picture"]'));
-        console.log(title);
-        console.log(content);
-        console.log(picture);
-    }
+    }    
 });
 
 Template.postSubmit.events({
@@ -33,17 +18,16 @@ Template.postSubmit.events({
         clearMap();
     },
     'click #addFieldDoneButton' : function(event, template){
-        Session.set("createdFieldBoundary", _.map(markers, function(m) {
-            return m.getLatLng();
-        }));
-        if (Session.get("currentViewedField") && (Session.get("beingEditedOption") === 'Field')) {
-            Session.set("createError", null);
-            $('#editDialogModal').modal('show');
-        } else {
-            Session.set("createError", null);
-            Session.set("showAddFieldDialog", true);
-            $('#createDialogModal').modal('show');
-        }
+        Session.set('addFieldStep', 'sixthStep');
+        $("#" + Config.mapDivID).hide();
+        $("#submitFarmBtn").toggle();
+        var coordinates = _.map(markers, function(m) {
+            return m.getLatLng().lat.toFixed(7) + ',' + m.getLatLng().lng.toFixed(7);
+        })
+        $('[name="geometry"]').val(coordinates.join(';'));
+    },
+    'submit form' : function(event, template){
+        Router.go('dashboard');
     }
 });
 
@@ -238,12 +222,6 @@ var initialize = function(element, centroid, zoom, features) {
       boundary.push(e.latlng);
     });
     */
-    map.on("move", function(e) {
-        if (Session.get("addFieldStep") === 'fourthStep') {
-            console.log(e);    
-        }
-        
-    });
     map.on("click", function(e) {
         if (!Meteor.userId())
             return;

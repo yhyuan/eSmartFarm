@@ -28,6 +28,19 @@ Schemas.Polygon = new SimpleSchema
 	coordinates:
 		type: [[Schemas.Geocoords]]
 
+SimpleSchema.messages
+	needsLatLong: '[label] should be of form [longitude, latitude]'
+	lonOutOfRange: '[label] longitude should be between -90 and 90'
+	latOutOfRange: '[label] latitude should be between -180 and 180'
+
+LocationSchema = new SimpleSchema
+	type:
+		type: String,
+		allowedValues: ['Polygon']
+	coordinates:
+		type: [[Number]]
+		decimal: true
+
 Schemas.Posts = new SimpleSchema
 	title:
 		type:String
@@ -36,7 +49,7 @@ Schemas.Posts = new SimpleSchema
 		max: 60
 
 	geometry:
-		type: Schemas.Polygon
+		type: String
 
 	content:
 		type: String

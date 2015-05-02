@@ -25,48 +25,33 @@
 				{{#autoForm id="add" collection="Posts" type="insert"}}
 				{{> afQuickField name="title"}}
 				{{> afQuickField name="content"}}
-<!--				{{> afQuickField name="picture"}}
-				{{> afQuickField style="display: none;" name="geometry"}}
-				<a href="{{pathFor 'postSubmitMap'}}" id='postSubmitMapURL'>{{_ "next"}}</a>-->
+				{{> afQuickField name="picture" remove-label='删除'}}
+				<div id="geometryField" style="display:none;">{{> afQuickField name="geometry"}}</div>
+				
 				{{#if addFieldStepIs "firstStep"}}
-					<div id="message"> {{_ "findLocationMessage"}} <input type="submit" value="{{_ "start"}}" class="btn btn-success btn-sm" id='addFieldStartButton'/></div>
+					<div id="message"> {{_ "findLocationMessage"}} <input type="button" value="{{_ "start"}}" class="btn btn-success btn-sm" id='addFieldStartButton'/></div>
 				{{/if}}
 				{{#if addFieldStepIs "secondStep"}}
 					<div id="message"> {{_ "tapMapMessage"}}</div>
 				{{/if}}
 				{{#if addFieldStepIs "thirdStep"}}
-					<div id="message"> {{_ "tapMapMessage"}} <input type="submit" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/></div>
+					<div id="message"> {{_ "tapMapMessage"}} <input type="button" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/></div>
 				{{/if}}
 				{{#if addFieldStepIs "fourthStep"}}
-					<div id="message"> {{_ "tapOriginalMessage"}} <input type="submit" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/></div>
+					<div id="message"> {{_ "tapOriginalMessage"}} <input type="button" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/></div>
 				{{/if}}
 				{{#if addFieldStepIs "fifthStep"}}
-					<div id="message"> {{_ "dragPointsMessage"}} <input type="submit" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/> <input type="submit" value="{{_ "done"}}" class="btn btn-primary btn-sm" id='addFieldDoneButton'/></div>
+					<div id="message"> {{_ "dragPointsMessage"}} <input type="button" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/> <input type="button" value="{{_ "done"}}" class="btn btn-primary btn-sm" id='addFieldDoneButton'/></div>
 				{{/if}}
+				{{#if addFieldStepIs "sixthStep"}}
+					<div id="message"> {{_ "finishPointsMessage"}}</div>
+				{{/if}}
+
     			{{> map}}
-				<button type="submit" class="btn btn-primary">{{_ "add_post_btn"}}</button>
+				<button type="submit" class="btn btn-primary" style="display:none;" id="submitFarmBtn">{{_ "add_post_btn"}}</button>
 				{{/autoForm}}
 			</div>
 	</div>
-</template>
-
-<template name="postSubmitMap">
-	{{#if addFieldStepIs "firstStep"}}
-		<div id="message"> {{_ "findLocationMessage"}} <input type="submit" value="{{_ "start"}}" class="btn btn-success btn-sm" id='addFieldStartButton'/></div>
-	{{/if}}
-	{{#if addFieldStepIs "secondStep"}}
-		<div id="message"> {{_ "tapMapMessage"}}</div>
-	{{/if}}
-	{{#if addFieldStepIs "thirdStep"}}
-		<div id="message"> {{_ "tapMapMessage"}} <input type="submit" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/></div>
-	{{/if}}
-	{{#if addFieldStepIs "fourthStep"}}
-		<div id="message"> {{_ "tapOriginalMessage"}} <input type="submit" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/></div>
-	{{/if}}
-	{{#if addFieldStepIs "fifthStep"}}
-		<div id="message"> {{_ "dragPointsMessage"}} <input type="submit" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/> <input type="submit" value="{{_ "done"}}" class="btn btn-primary btn-sm" id='addFieldDoneButton'/></div>
-	{{/if}}
-	{{> map}}
 </template>
 
 <template name="map">

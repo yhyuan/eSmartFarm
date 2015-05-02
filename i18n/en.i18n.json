@@ -58,10 +58,15 @@
 	"tapMapMessage": "Tap to add points around your field",
 	"tapOriginalMessage": "Tap your original point to complete the shape",
 	"dragPointsMessage": "Drag points to modify your field shape",
+	"finishPointsMessage": "Please click on add a filed to add the field.",
 	"farmName": "Farm Name",
 	"farmDescription": "Farm Description",
 	"picture": "Picture",
-	
+	"remove": "Remove",
+	"chooseFile": "Choose File",
+
+
+
 	/*Account*/
 	"account_details": "Account Details",
 	"delete_account": "Delete Account",
