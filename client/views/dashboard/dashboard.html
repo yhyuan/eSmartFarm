@@ -25,7 +25,7 @@
 				{{#autoForm id="add" collection="Posts" type="insert"}}
 				{{> afQuickField name="title"}}
 				{{> afQuickField name="content"}}
-				{{> afQuickField name="picture" remove-label='删除'}}
+<!--			{{> afQuickField name="picture" remove-label='删除'}}-->
 				<div id="geometryField" style="display:none;">{{> afQuickField name="geometry"}}</div>
 				
 				{{#if addFieldStepIs "firstStep"}}
@@ -77,7 +77,7 @@
 			<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">
-							{{title}}
+							{{title}} {{calculateArea geometry}}
 							<span class="pull-right">
 								<i class="fa fa-thumbs-up"></i> {{favoriteCount _id}}
 								<i class="fa fa-comments"></i> {{commentCount _id}}
@@ -101,7 +101,7 @@
 									{{#afModal title="Update post" omitFields="createdAt,updatedAt,owner" class="text-primary" collection="Posts" operation="update" doc=_id}}
 										<i class="fa fa-pencil" buttonContent="Edit post"></i> {{_ "edit_post"}}
 									{{/afModal}}
-									{{#afModal title="Delete post" class="text-danger" collection="Posts" operation="remove" doc=_id}}
+									{{#afModal title="删除农场" buttonContent="删除" class="text-danger" collection="Posts" operation="remove" doc=_id prompt="你确定要删除本农场？" }}
 										<i class="fa fa-times" buttonContent="Edit post"></i> {{_ "delete"}}
 									{{/afModal}}
 								</small>

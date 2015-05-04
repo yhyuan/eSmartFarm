@@ -1,45 +1,4 @@
 @Posts = new Meteor.Collection('posts');
-Schemas.Geocoords = new SimpleSchema
-	lng:
-		type:Number
-		decimal: true
-		min: -180
-		max: 180
-
-	lat:
-		type:Number
-		decimal: true
-		min: -90
-		max: 90
-
-Schemas.Point = new SimpleSchema
-	type:
-		type:String
-		autoValue:  ->
-			"Point"
-	coordinate:
-		type: Schemas.Geocoords
-
-Schemas.Polygon = new SimpleSchema
-	type:
-		type: String
-		autoValue:  ->
-			"Polygon"
-	coordinates:
-		type: [[Schemas.Geocoords]]
-
-SimpleSchema.messages
-	needsLatLong: '[label] should be of form [longitude, latitude]'
-	lonOutOfRange: '[label] longitude should be between -90 and 90'
-	latOutOfRange: '[label] latitude should be between -180 and 180'
-
-LocationSchema = new SimpleSchema
-	type:
-		type: String,
-		allowedValues: ['Polygon']
-	coordinates:
-		type: [[Number]]
-		decimal: true
 
 Schemas.Posts = new SimpleSchema
 	title:
@@ -70,15 +29,6 @@ Schemas.Posts = new SimpleSchema
 		autoValue: ->
 			if this.isUpdate
 				new Date()
-
-	picture:
-		type: String
-		label:  ->
-			TAPi18n.__ 'picture'
-		autoform:
-			afFieldInput:
-				type: 'fileUpload'
-				collection: 'Attachments'
 
 	owner: 
 		type: String

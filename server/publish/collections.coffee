@@ -1,5 +1,5 @@
 Meteor.publish 'posts', ->
-	Posts.find()
+	Posts.find owner : this.userId
 
 Meteor.publish 'attachments', ->
 	Attachments.find()
