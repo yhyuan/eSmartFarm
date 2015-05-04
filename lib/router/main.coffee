@@ -6,7 +6,6 @@ Router.map ->
     path: "/dashboard"
     waitOn: ->
       [
-        Meteor.subscribe 'posts'
         Meteor.subscribe 'favorites'
         Meteor.subscribe 'comments'
         Meteor.subscribe 'attachments'
@@ -39,7 +38,13 @@ Router.map ->
 
   @route "postSubmit",
     path: "/postSubmit"
-    waitOn: ->
-      [
-        Meteor.subscribe 'posts'
-      ]
+
+  @route "postPage",
+    path: "/posts/:_id"
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "postEdit",
+    path: "/posts/:_id/edit"
+    data: ->
+      Posts.findOne(this.params._id)

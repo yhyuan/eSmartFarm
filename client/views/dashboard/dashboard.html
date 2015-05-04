@@ -13,7 +13,7 @@
 </template>
 
 <template name="addPostButton">
-	<a href="{{pathFor 'postSubmit'}}">{{_ "add_post_btn"}}</a>
+	<a href="{{pathFor 'postSubmit'}}" class="btn btn-success">{{_ "add_post_btn"}}</a>
 </template>
 
 <template name="postSubmit">
@@ -22,7 +22,7 @@
 				<h3 class="panel-title">{{_ "add_post"}}</h3>
 			</div>
 			<div class="panel-body">
-				{{#autoForm id="add" collection="Posts" type="insert"}}
+				{{#autoForm id="addPost" collection="Posts" type="insert"}}
 				{{> afQuickField name="title"}}
 				{{> afQuickField name="content"}}
 <!--			{{> afQuickField name="picture" remove-label='删除'}}-->
@@ -47,7 +47,7 @@
 					<div id="message"> {{_ "finishPointsMessage"}}</div>
 				{{/if}}
 
-    			{{> map}}
+				{{> map}}
 				<button type="submit" class="btn btn-primary" style="display:none;" id="submitFarmBtn">{{_ "add_post_btn"}}</button>
 				{{/autoForm}}
 			</div>
@@ -69,6 +69,157 @@
 	</div>
 </template>
 
+<template name="postEdit">
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{_ "edit_post_btn"}}</h3>
+			</div>
+			<div class="panel-body">
+				<span class="pull-right">
+					{{#afModal formId="deletePost" title=deletePostTitle buttonContent=deletePostButtonContent class="btn btn-danger" collection="Posts" operation="remove" doc=this._id prompt=deletePostPrompt}}
+					  {{_ "delete"}}
+					{{/afModal}}
+				</span>
+				{{#autoForm id="editPost" collection="Posts" type="update" doc=this}}
+				{{> afQuickField name="title"}}
+				{{> afQuickField name="content"}}
+<!--			{{> afQuickField name="picture" remove-label='删除'}}-->
+				<div id="geometryField" style="display:none;">{{> afQuickField name="geometry"}}</div>
+				{{#if addFieldStepIs "firstStep"}}
+					<div id="message"> {{_ "findLocationMessage"}} <input type="button" value="{{_ "start"}}" class="btn btn-success btn-sm" id='addFieldStartButton'/></div>
+				{{/if}}
+				{{#if addFieldStepIs "secondStep"}}
+					<div id="message"> {{_ "tapMapMessage"}}</div>
+				{{/if}}
+				{{#if addFieldStepIs "thirdStep"}}
+					<div id="message"> {{_ "tapMapMessage"}} <input type="button" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/></div>
+				{{/if}}
+				{{#if addFieldStepIs "fourthStep"}}
+					<div id="message"> {{_ "tapOriginalMessage"}} <input type="button" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/></div>
+				{{/if}}
+				{{#if addFieldStepIs "fifthStep"}}
+					<div id="message"> {{_ "dragPointsMessage"}} <input type="button" value="{{_ "clear"}}" class="btn btn-default btn-sm" id='addFieldClearButton'/> <input type="button" value="{{_ "done"}}" class="btn btn-primary btn-sm" id='addFieldDoneButton'/></div>
+				{{/if}}
+				{{#if addFieldStepIs "sixthStep"}}
+					<div id="message"> {{_ "finishPointsMessage"}}</div>
+				{{/if}}
+
+				{{> map}}
+				<button type="submit" class="btn btn-primary" style="display:none;" id="submitFarmBtn">{{_ "save"}}</button>
+				{{/autoForm}}
+			</div>
+	</div>
+</template>
+
+<template name="postPage">
+	<h3>{{_ "farmName"}}: {{title}}</h3> {{_ "farmArea"}}: {{calculateArea geometry}} {{_ "hectares"}}
+	{{#if $eq owner User._id}}
+		<a href="{{pathFor 'postEdit'}}" class="btn btn-primary align-right">{{_ "edit_post_btn"}}</a>
+	{{/if}}
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{_ "temperature"}}
+				</h3>
+			</div>
+			<div class="panel-body">
+				{{_ "realtime"}}: 15°C <input type="submit" value="{{_ "hours36"}}" class="btn btn-success btn-sm"/> 
+				<input type="submit" value="{{_ "days3"}}" class="btn btn-success btn-sm"/>
+				<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
+				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>
+			</div>
+			<!--<div class="panel-footer">
+				{{> favoriteButton _id=_id}}
+				{{> commentFormToggle }}
+				{{> comments}}
+			</div>-->
+	</div>
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{_ "precipitation"}}
+				</h3>
+			</div>
+			<div class="panel-body">
+				{{_ "realtime"}}: 15°C <input type="submit" value="{{_ "hours36"}}" class="btn btn-success btn-sm"/> 
+				<input type="submit" value="{{_ "days3"}}" class="btn btn-success btn-sm"/>
+				<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
+				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>
+			</div>
+			<!--<div class="panel-footer">
+				{{> favoriteButton _id=_id}}
+				{{> commentFormToggle }}
+				{{> comments}}
+			</div>-->
+	</div>
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{_ "soil"}}
+				</h3>
+			</div>
+			<div class="panel-body">
+				{{_ "realtime"}}: 15°C <input type="submit" value="{{_ "hours36"}}" class="btn btn-success btn-sm"/> 
+				<input type="submit" value="{{_ "days3"}}" class="btn btn-success btn-sm"/>
+				<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
+				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>
+			</div>
+			<!--<div class="panel-footer">
+				{{> favoriteButton _id=_id}}
+				{{> commentFormToggle }}
+				{{> comments}}
+			</div>-->
+	</div>
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{_ "crops"}}
+				</h3>
+			</div>
+			<div class="panel-body">
+				{{_ "realtime"}}: 15°C <input type="submit" value="{{_ "hours36"}}" class="btn btn-success btn-sm"/> 
+				<input type="submit" value="{{_ "days3"}}" class="btn btn-success btn-sm"/>
+				<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
+				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>
+			</div>
+			<div class="panel-footer">
+				{{> favoriteButton _id=_id}}
+				{{> commentFormToggle }}
+				{{> comments}}
+			</div>
+	</div>
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{_ "activities"}}
+				</h3>
+			</div>
+			<div class="panel-body">
+				{{_ "realtime"}}: 15°C <input type="submit" value="{{_ "hours36"}}" class="btn btn-success btn-sm"/> 
+				<input type="submit" value="{{_ "days3"}}" class="btn btn-success btn-sm"/>
+				<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
+				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>
+			</div>
+			<div class="panel-footer">
+				{{> favoriteButton _id=_id}}
+				{{> commentFormToggle }}
+				{{> comments}}
+			</div>
+	</div>
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{_ "yields"}}
+				</h3>
+			</div>
+			<div class="panel-body">
+				{{_ "realtime"}}: 15°C <input type="submit" value="{{_ "hours36"}}" class="btn btn-success btn-sm"/> 
+				<input type="submit" value="{{_ "days3"}}" class="btn btn-success btn-sm"/>
+				<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
+				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>
+			</div>
+			<div class="panel-footer">
+				{{> favoriteButton _id=_id}}
+				{{> commentFormToggle }}
+				{{> comments}}
+			</div>
+	</div>
+
+</template>
 <template name="posts">
 	{{#if isPostsZero}}
     	<p class="text-left">{{_ "no_post_message"}}</p>
@@ -77,14 +228,16 @@
 			<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">
-							{{title}} {{calculateArea geometry}}
-							<span class="pull-right">
+							{{_ "farmName"}}: {{title}} {{_ "farmArea"}}: {{calculateArea geometry}} {{_ "hectares"}}
+							<!--<span class="pull-right">
 								<i class="fa fa-thumbs-up"></i> {{favoriteCount _id}}
 								<i class="fa fa-comments"></i> {{commentCount _id}}
-							</span>
+							</span>-->
 						</h3>
 					</div>
 					<div class="panel-body">
+						<p class="text-center"><a href="{{pathFor 'postPage'}}">{{_ "view_post_btn"}}</a></p>
+						<!--
 						<p class="text-center">
 							{{#with getDoc picture 'Attachments'}}
 								<img src="{{url}}" class="img-thumbnail img-rounded">
@@ -107,12 +260,12 @@
 								</small>
 								{{/if}}
 							</div>
-						</div>
+						</div>-->
 					</div>
 					<div class="panel-footer">
-						{{> favoriteButton _id=_id}}
+						<!--{{> favoriteButton _id=_id}}
 						{{> commentFormToggle }}
-						{{> comments}}
+						{{> comments}}-->
 					</div>
 			</div>
 		{{/each}}

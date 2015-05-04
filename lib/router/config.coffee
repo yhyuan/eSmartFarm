@@ -3,7 +3,10 @@ Router.configure
   loadingTemplate: "loading"
   notFoundTemplate: "notFound"
   routeControllerNameConverter: "camelCase"
-
+  waitOn: ->
+    [
+      Meteor.subscribe 'posts'
+    ]
   onBeforeAction: ->
   	# Redirect to set username if required
     if Config.username and Meteor.userId() and not Meteor.user().username
