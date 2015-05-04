@@ -10,6 +10,37 @@ Template.postSubmit.helpers({
     }
 });
 
+Template.cropAdd.helpers({
+    cropOptions: function() {
+        return _.map(["小麦", "玉米", "水稻", "大豆", "高粱"], function(crop) {
+            return {label: "" + crop, value: crop};
+        });
+    },
+    cropValue: function() {
+        return "小麦";
+    },    
+    yearOptions: function() {
+        return _.map(_.range(new Date().getFullYear(), 2000, -1), function(year) {
+            return {label: "" + year, value: year};
+        });
+    },
+    yearValue: function() {
+        return new Date().getFullYear();
+    },
+    SelectOne: function() {
+        return TAPi18n.__('SelectOne');
+    }
+});
+
+Template.postPage.helpers({
+    isCropsInCurrentYearZero: function() {
+        return Crops.find({year : new Date().getFullYear()}).count() === 0;
+    },
+    cropsListInCurrentYear: function() {
+        return Crops.find({year : new Date().getFullYear()});
+    }
+});
+
 Template.postEdit.helpers({
     addFieldStepIs: function(step) {
         return Session.get("addFieldStep") === step;

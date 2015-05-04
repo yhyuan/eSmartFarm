@@ -84,7 +84,11 @@
 	"crops": "Crops",
 	"activities": "Activities",
 	"yields": "Yields",
-
+	"year": "Year",
+	"add": "Add",
+	"edit": "Edit",
+	"no_crop_message": "There is no cropsinformation for current year. Please use Add tool to add crop information.",
+	"SelectOne": "Select One",
 	/*Account*/
 	"account_details": "Account Details",
 	"delete_account": "Delete Account",

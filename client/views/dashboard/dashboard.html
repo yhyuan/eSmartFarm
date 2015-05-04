@@ -54,6 +54,24 @@
 	</div>
 </template>
 
+<template name="cropAdd">
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{_ "add"}}{{_ "crops"}}</h3>
+			</div>
+			<div class="panel-body">
+				{{#autoForm id="addCrop" collection="Crops" type="insert"}}
+				{{> afQuickField name="crop" options=cropOptions value=cropValue firstOption=SelectOne}}
+				{{> afQuickField name="year" options=yearOptions value=yearValue firstOption=SelectOne}}
+				<div id="geometryField" style="display:none;">{{> afQuickField name="farmId"}}</div>				
+				<button type="submit" class="btn btn-primary" id="submitFarmBtn">{{_ "add"}}</button>
+				{{/autoForm}}
+			</div>
+	</div>
+</template>
+
+
+
 <template name="map">
     <div id="{{divID}}" class="map"></div>
 </template>
@@ -127,11 +145,6 @@
 				<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
 				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>
 			</div>
-			<!--<div class="panel-footer">
-				{{> favoriteButton _id=_id}}
-				{{> commentFormToggle }}
-				{{> comments}}
-			</div>-->
 	</div>
 	<div class="panel panel-default">
 			<div class="panel-heading">
@@ -144,11 +157,6 @@
 				<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
 				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>
 			</div>
-			<!--<div class="panel-footer">
-				{{> favoriteButton _id=_id}}
-				{{> commentFormToggle }}
-				{{> comments}}
-			</div>-->
 	</div>
 	<div class="panel panel-default">
 			<div class="panel-heading">
@@ -156,16 +164,11 @@
 				</h3>
 			</div>
 			<div class="panel-body">
-				{{_ "realtime"}}: 15°C <input type="submit" value="{{_ "hours36"}}" class="btn btn-success btn-sm"/> 
-				<input type="submit" value="{{_ "days3"}}" class="btn btn-success btn-sm"/>
-				<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
-				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>
+				{{_ "realtime"}}: 15°C <input type="button" value="{{_ "hours36"}}" class="btn btn-success btn-sm"/> 
+				<input type="button" value="{{_ "days3"}}" class="btn btn-success btn-sm"/>
+				<input type="button" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
+				<input type="button" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>
 			</div>
-			<!--<div class="panel-footer">
-				{{> favoriteButton _id=_id}}
-				{{> commentFormToggle }}
-				{{> comments}}
-			</div>-->
 	</div>
 	<div class="panel panel-default">
 			<div class="panel-heading">
@@ -173,15 +176,35 @@
 				</h3>
 			</div>
 			<div class="panel-body">
-				{{_ "realtime"}}: 15°C <input type="submit" value="{{_ "hours36"}}" class="btn btn-success btn-sm"/> 
-				<input type="submit" value="{{_ "days3"}}" class="btn btn-success btn-sm"/>
-				<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
-				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>
+			{{#if isCropsInCurrentYearZero}}
+	          {{_ "no_crop_message"}}
+	        {{else}}
+	          <input type="submit" value="{{_ "edit"}}" class="btn btn-success btn-sm"/>
+	          <table class="table table-hover">
+	            <thead>
+	              <tr>
+	                <th>{{_ "crops"}}</th>
+	                <th>{{_ "year"}}</th>
+	              </tr>
+	            </thead>
+	            <tbody>
+	              {{#each cropsListInCurrentYear}}
+	                <tr>
+	                  <td>{{crop}}</td>
+	                  <td>{{year}}</td>
+	                </tr>
+	              {{/each}}
+	            </tbody>
+	          </table>
+	        {{/if}}
 			</div>
 			<div class="panel-footer">
-				{{> favoriteButton _id=_id}}
-				{{> commentFormToggle }}
-				{{> comments}}
+			<a href="{{pathFor 'cropAdd'}}" class="btn btn-success btn-sm">{{_ "add"}}</a>
+				{{#if isCropsInCurrentYearZero}}
+
+				{{else}}
+				<input type="button" value="{{_ "edit"}}" class="btn btn-primary btn-sm"/> 
+				{{/if}}
 			</div>
 	</div>
 	<div class="panel panel-default">

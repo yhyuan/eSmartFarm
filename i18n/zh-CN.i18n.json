@@ -84,9 +84,11 @@
 	"crops": "农作物",
 	"activities": "农事活动",
 	"yields": "产量",
-
-
-
+	"year": "年度",
+	"add": "添加",
+	"edit": "编辑",
+	"no_crop_message": "本农场目前没有农作物信息，请添加农作物信息。",
+	"SelectOne": "请选择",
 	/*Account*/
 	"account_details": "账户细节",
 	"delete_account": "删除账户",

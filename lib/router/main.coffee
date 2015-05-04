@@ -41,10 +41,19 @@ Router.map ->
 
   @route "postPage",
     path: "/posts/:_id"
+    waitOn: ->
+      Meteor.subscribe 'crops', this.params._id
     data: ->
       Posts.findOne(this.params._id)
 
   @route "postEdit",
     path: "/posts/:_id/edit"
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "cropAdd",
+    path: "/posts/:_id/cropAdd"
+    waitOn: ->
+      Meteor.subscribe 'crops', this.params._id
     data: ->
       Posts.findOne(this.params._id)
