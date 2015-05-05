@@ -22,6 +22,22 @@ Crops.allow
 	remove: (userId, doc) ->
 		userId == doc.owner
 
+Activities.allow
+	insert: (userId, doc) ->
+		userId == doc.owner
+	update: (userId, doc, fields, modifier) ->
+		userId == doc.owner
+	remove: (userId, doc) ->
+		userId == doc.owner
+
+Yields.allow
+	insert: (userId, doc) ->
+		userId == doc.owner
+	update: (userId, doc, fields, modifier) ->
+		userId == doc.owner
+	remove: (userId, doc) ->
+		userId == doc.owner
+
 Attachments.allow
 	insert: (userId, doc) ->
 		true

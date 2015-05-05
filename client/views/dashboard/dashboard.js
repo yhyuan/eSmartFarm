@@ -1,6 +1,15 @@
 Template.posts.helpers({
     isPostsZero: function() {
         return Posts.find().count() === 0;
+    },
+    deletePostTitle: function() {
+        return TAPi18n.__('deletePost'); //'删除农场';
+    },
+    deletePostButtonContent: function() {
+        return TAPi18n.__('delete');//'删除';
+    },
+    deletePostPrompt: function() {
+        return TAPi18n.__('confirmDelete');//"你确定要删除本农场？";
     }
 });
 
@@ -17,12 +26,12 @@ Template.cropAdd.helpers({
         });
     },
     yearOptions: function() {
-        return _.map(_.range(new Date().getFullYear(), 2000, -1), function(year) {
+        var availableYears = _.map(Crops.find().fetch(), function(crop) {
+            return crop.year;
+        });
+        return _.map(_.difference(_.range(new Date().getFullYear(), 2000, -1), availableYears), function(year) {
             return {label: "" + year, value: year};
         });
-    },
-    yearValue: function() {
-        return new Date().getFullYear();
     },
     SelectOne: function() {
         return TAPi18n.__('SelectOne');
@@ -34,41 +43,176 @@ Template.cropAdd.helpers({
 
 Template.cropView.helpers({
     cropsList: function() {
-        return Crops.find();
+        return Crops.find({}, {sort: {year: -1}});
     }
 });
 
 Template.cropEdit.helpers({
     cropsList: function() {
-        return Crops.find();
+        return Crops.find({}, {sort: {year: -1}});
+    },
+    isCropsZero: function() {
+        return Crops.find().count() === 0;
+    },
+    deleteCropTitle: function() {
+        return TAPi18n.__('deleteCrop');
+    },
+    deleteCropButtonContent: function() {
+        return TAPi18n.__('delete');//'删除';
+    },
+    deleteCropPrompt: function() {
+        return TAPi18n.__('confirmDeleteCrop');
+    }
+});
+
+Template.activityAdd.helpers({
+    nameOptions: function() {
+        return _.map(['播种', '施肥', '收割'], function(crop) {
+            return {label: "" + crop, value: crop};
+        });
+    },
+    cropYearOptions: function() {
+        var cropsList = _.map(Crops.find().fetch(), function(crop) {
+            return _.map(crop.crop, function(cropName) {
+                var item = cropName + '-' + crop.year;
+                return {label: item, value: item};
+            });
+        });
+        return _.reduce(cropsList, function(memo, num){ return memo.concat(num); }, []);
+    },
+    SelectOne: function() {
+        return TAPi18n.__('SelectOne');
+    },
+    farmIdValue: function() {
+        return this._id;
+    }
+});
+
+Template.activityView.helpers({
+    activitiesList: function() {
+        return Activities.find({}, {sort: {date: -1}});
+    },
+    formatDate: function(date) {
+        return _.template(TAPi18n.__('dateFormat'), {
+            year: date.getFullYear(),
+            month: date.getMonth() + 1,
+            day: date.getDate()
+        });
+    }
+});
+
+Template.activityEdit.helpers({
+    activitiesList: function() {
+        return Activities.find({}, {sort: {date: -1}});
+    },
+    isActivitiesZero: function() {
+        return Activities.find().count() === 0;
+    },
+    deleteActivityTitle: function() {
+        return TAPi18n.__('deleteActivity');
+    },
+    deleteActivityButtonContent: function() {
+        return TAPi18n.__('delete');//'删除';
+    },
+    deleteActivityPrompt: function() {
+        return TAPi18n.__('confirmDeleteActivity');
+    },
+    formatDate: function(date) {
+        return _.template(TAPi18n.__('dateFormat'), {
+            year: date.getFullYear(),
+            month: date.getMonth() + 1,
+            day: date.getDate()
+        });
+    }
+});
+
+Template.yieldAdd.helpers({
+    cropYearOptions: function() {
+        var cropsListInYields = _.map(Yields.find().fetch(), function(yields) {
+            return yields.cropYear;
+        });
+        var cropsList = _.map(Crops.find().fetch(), function(crop) {
+            return _.map(crop.crop, function(name) {
+                return name + '-' + crop.year;
+            });
+        });
+        cropsList = _.reduce(cropsList, function(memo, num){ return memo.concat(num); }, []);
+        return _.map(_.difference(cropsList, cropsListInYields), function(item) {
+            return {label: item, value: item};
+        });
+    },
+    SelectOne: function() {
+        return TAPi18n.__('SelectOne');
+    },
+    farmIdValue: function() {
+        return this._id;
+    }
+});
+
+Template.yieldView.helpers({
+    yieldsList: function() {
+        return Yields.find();
+    }
+});
+
+Template.yieldEdit.helpers({
+    yieldsList: function() {
+        return Yields.find();
+    },
+    isYieldsZero: function() {
+        return Yields.find().count() === 0;
+    },
+    deleteYieldTitle: function() {
+        return TAPi18n.__('deleteYield');
+    },
+    deleteYieldButtonContent: function() {
+        return TAPi18n.__('delete');//'删除';
+    },
+    deleteYieldPrompt: function() {
+        return TAPi18n.__('confirmDeleteYield');
     }
 });
 
 Template.postPage.helpers({
     isCropsZero: function() {
-        //return Crops.find({year : new Date().getFullYear()}).count() === 0;
         return Crops.find().count() === 0;
     },
     cropsListInMostRecentYear: function() {
         var crops = Crops.find().fetch();
         var crop = _.max(crops, function(crop){ return crop.year;});
         return crop;
+    },
+    isActivitiesZero: function() {
+        return Activities.find().count() === 0;
+    },
+    recent_activities_message: function() {
+        var activity = _.max(Activities.find().fetch(), function(activity){ return activity.date;});
+        var formatDate = function(date) {
+            return _.template(TAPi18n.__('dateFormat'), {
+                year: date.getFullYear(),
+                month: date.getMonth() + 1,
+                day: date.getDate()
+            });
+        };
+        activity.date = formatDate(activity.date);
+        return _.template(TAPi18n.__('recent_activities_message'), activity);
+    },
+    isYieldsZero: function() {
+        return Yields.find().count() === 0;
+    },
+    recentYields: function() {
+        var yields = Yields.find().fetch();
+        var recentYear = _.max(yields, function(y){ return y.cropYear.split('-')[1];}).cropYear.split('-')[1];
+        return _.filter(yields, function(y) {
+            return y.cropYear.indexOf(recentYear) >= 0;
+        });
     }
 });
 
 Template.postEdit.helpers({
     addFieldStepIs: function(step) {
         return Session.get("addFieldStep") === step;
-    },
-    deletePostTitle: function() {
-        return TAPi18n.__('deletePost'); //'删除农场';
-    },
-    deletePostButtonContent: function() {
-        return TAPi18n.__('delete');//'删除';
-    },
-    deletePostPrompt: function() {
-        return TAPi18n.__('confirmDelete');//"你确定要删除本农场？";
-    },
+    }
 });
 
 Template.postEdit.events({
@@ -83,12 +227,6 @@ Template.postEdit.events({
             return m.getLatLng().lng.toFixed(7) + ',' + m.getLatLng().lat.toFixed(7);
         })
         $('[name="geometry"]').val(coordinates.join(';'));
-    }
-});
-
-Template.autoformModals.events({
-    'click button:not(.close)': function() {
-        Router.go("/dashboard");
     }
 });
 
@@ -109,9 +247,31 @@ Template.postSubmit.events({
         $('[name="geometry"]').val(coordinates.join(';'));
     }
 });
-AutoForm.addHooks(['addPost', 'editPost', 'addCrop'], {
+AutoForm.addHooks(['addPost', 'editPost'], {
     onSuccess: function(operation, result, template) {
+        console.log(result);
         Router.go("/dashboard");
+    }
+});
+
+AutoForm.addHooks(['addCrop'], {
+    onSuccess: function(operation, result, template) {
+        var crop = Crops.find({_id: result}).fetch()[0];
+        Router.go("cropEdit", {_id: crop.farmId});
+    }
+});
+
+AutoForm.addHooks(['addActivity'], {
+    onSuccess: function(operation, result, template) {
+        var activity = Activities.find({_id: result}).fetch()[0];
+        Router.go("activityEdit", {_id: activity.farmId});
+    }
+});
+
+AutoForm.addHooks(['addYield'], {
+    onSuccess: function(operation, result, template) {
+        var y = Yields.find({_id: result}).fetch()[0];
+        Router.go("yieldEdit", {_id: y.farmId});
     }
 });
 

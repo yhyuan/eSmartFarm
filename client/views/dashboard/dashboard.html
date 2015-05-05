@@ -55,6 +55,7 @@
 </template>
 
 <template name="cropAdd">
+	<a href="{{pathFor 'cropEdit'}}" class="btn btn-primary pull-right">{{_ "close"}}</a>
 	<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title">{{_ "add"}}{{_ "crops"}}</h3>
@@ -62,7 +63,7 @@
 			<div class="panel-body">
 				{{#autoForm id="addCrop" collection="Crops" type="insert"}}
 				{{> afQuickField name="crop" options=cropOptions firstOption=SelectOne noselect=true}}
-				{{> afQuickField name="year" options=yearOptions value=yearValue firstOption=SelectOne}}
+				{{> afQuickField name="year" options=yearOptions firstOption=SelectOne}}
 				<div id="farmIdField" style="display:none;">{{> afQuickField name="farmId" value=farmIdValue}}</div>				
 				<button type="submit" class="btn btn-primary" id="submitFarmBtn">{{_ "add"}}</button>
 				{{/autoForm}}
@@ -71,6 +72,7 @@
 </template>
 
 <template name="cropView">
+	<a href="{{pathFor 'postPage'}}" class="btn btn-primary pull-right">{{_ "close"}}</a>
 	<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title">{{_ "view_post_btn"}}{{_ "crops"}}</h3>
@@ -97,16 +99,21 @@
 </template>
 
 <template name="cropEdit">
+	<a href="{{pathFor 'postPage'}}" class="btn btn-primary pull-right">{{_ "close"}}</a>
 	<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title">{{_ "edit_post_btn"}}{{_ "crops"}}</h3>
 			</div>
 			<div class="panel-body">
+			{{#if isCropsZero}}
+	          {{_ "add_crop_message"}}
+	        {{else}}
 	          <table class="table table-hover">
 	            <thead>
 	              <tr>
 	                <th>{{_ "crops"}}</th>
 	                <th>{{_ "year"}}</th>
+	                <th>{{_ "delete"}}</th>
 	              </tr>
 	            </thead>
 	            <tbody>
@@ -114,16 +121,195 @@
 	                <tr>
 	                  <td>{{crop}}</td>
 	                  <td>{{year}}</td>
+	                  <td>
+	                  	{{#afModal formId="deleteCrop" title=deleteCropTitle buttonContent=deleteCropButtonContent class="btn btn-danger btn-sm" collection="Crops" operation="remove" doc=this._id prompt=deleteCropPrompt}}
+					  		{{_ "delete"}}
+						{{/afModal}}
+					</td>
 	                </tr>
 	              {{/each}}
 	            </tbody>
 	          </table>
+	        {{/if}}
+			</div>
+			<div class="panel-footer">
+				<a href="{{pathFor 'cropAdd'}}" class="btn btn-primary">{{_ "add"}}</a>
+			</div>			
+	</div>
+</template>
+
+<template name="activityAdd">
+	<a href="{{pathFor 'activityEdit'}}" class="btn btn-primary pull-right">{{_ "close"}}</a>
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{_ "add"}}{{_ "activities"}}</h3>
+			</div>
+			<div class="panel-body">
+				{{#autoForm id="addActivity" collection="Activities" type="insert"}}
+				{{> afQuickField name="name" options=nameOptions firstOption=SelectOne}}
+				{{> afQuickField name="date"}}
+				{{> afQuickField name="cropYear" options=cropYearOptions firstOption=SelectOne}}
+				<div id="farmIdField" style="display:none;">{{> afQuickField name="farmId" value=farmIdValue}}</div>				
+				<button type="submit" class="btn btn-primary" id="submitFarmBtn">{{_ "add"}}</button>
+				{{/autoForm}}
 			</div>
 	</div>
 </template>
 
+<template name="activityView">
+	<a href="{{pathFor 'postPage'}}" class="btn btn-primary pull-right">{{_ "close"}}</a>
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{_ "view_post_btn"}}{{_ "activities"}}</h3>
+			</div>
+			<div class="panel-body">
+	          <table class="table table-hover">
+	            <thead>
+	              <tr>
+	                <th>{{_ "activities"}}</th>
+	                <th>{{_ "date"}}</th>
+	                <th>{{_ "crops"}}</th>
+	              </tr>
+	            </thead>
+	            <tbody>
+	              {{#each activitiesList}}
+	                <tr>
+	                  <td>{{name}}</td>
+	                  <td>{{formatDate date}}</td>
+	                  <td>{{cropYear}}</td>
+	                </tr>
+	              {{/each}}
+	            </tbody>
+	          </table>
+		</div>
+	</div>
+</template>
 
+<template name="activityEdit">
+	<a href="{{pathFor 'postPage'}}" class="btn btn-primary pull-right">{{_ "close"}}</a>
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{_ "edit_post_btn"}}{{_ "activities"}}</h3>
+			</div>
+			<div class="panel-body">
+			{{#if isActivitiesZero}}
+	          {{_ "add_activity_message"}}
+	        {{else}}
+	          <table class="table table-hover">
+	            <thead>
+	              <tr>
+	                <th>{{_ "activities"}}</th>
+	                <th>{{_ "date"}}</th>
+	                <th>{{_ "crops"}}</th>
+	                <th>{{_ "delete"}}</th>
+	              </tr>
+	            </thead>
+	            <tbody>
+	              {{#each activitiesList}}
+	                <tr>
+	                  <td>{{name}}</td>
+	                  <td>{{formatDate date}}</td>
+	                  <td>{{cropYear}}</td>
+	                  <td>
+	                  	{{#afModal formId="deleteActivity" title=deleteActivityTitle buttonContent=deleteActivityButtonContent class="btn btn-danger btn-sm" collection="Activities" operation="remove" doc=this._id prompt=deleteActivityPrompt}}
+					  		{{_ "delete"}}
+						{{/afModal}}
+					</td>
+	                </tr>
+	              {{/each}}
+	            </tbody>
+	          </table>
+	        {{/if}}
+			</div>
+			<div class="panel-footer">
+				<a href="{{pathFor 'activityAdd'}}" class="btn btn-primary">{{_ "add"}}</a>
+			</div>			
+	</div>
+</template>
 
+<template name="yieldAdd">
+	<a href="{{pathFor 'yieldEdit'}}" class="btn btn-primary pull-right">{{_ "close"}}</a>
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{_ "add"}}{{_ "yields"}}</h3>
+			</div>
+			<div class="panel-body">
+				{{#autoForm id="addYield" collection="Yields" type="insert"}}
+				{{> afQuickField name="cropYear" options=cropYearOptions firstOption=SelectOne}}
+				{{> afQuickField name="yields"}}
+				<div id="farmIdField" style="display:none;">{{> afQuickField name="farmId" value=farmIdValue}}</div>				
+				<button type="submit" class="btn btn-primary" id="submitFarmBtn">{{_ "add"}}</button>
+				{{/autoForm}}
+			</div>
+	</div>
+</template>
+
+<template name="yieldView">
+	<a href="{{pathFor 'postPage'}}" class="btn btn-primary pull-right">{{_ "close"}}</a>
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{_ "view_post_btn"}}{{_ "yields"}}</h3>
+			</div>
+			<div class="panel-body">
+	          <table class="table table-hover">
+	            <thead>
+	              <tr>
+	                <th>{{_ "crops"}}</th>
+	                <th>{{_ "yields"}} ({{_ "kg"}})</th>
+	              </tr>
+	            </thead>
+	            <tbody>
+	              {{#each yieldsList}}
+	                <tr>
+	                  <td>{{cropYear}}</td>
+	                  <td>{{yields}}</td>
+	                </tr>
+	              {{/each}}
+	            </tbody>
+	          </table>
+		</div>
+	</div>
+</template>
+
+<template name="yieldEdit">
+	<a href="{{pathFor 'postPage'}}" class="btn btn-primary pull-right">{{_ "close"}}</a>
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{_ "edit_post_btn"}}{{_ "yields"}}</h3>
+			</div>
+			<div class="panel-body">
+			{{#if isYieldsZero}}
+	          {{_ "add_yield_message"}}
+	        {{else}}
+	          <table class="table table-hover">
+	            <thead>
+	              <tr>
+	                <th>{{_ "crops"}}</th>
+	                <th>{{_ "yields"}} ({{_ "kg"}})</th>
+	                <th>{{_ "delete"}}</th>
+	              </tr>
+	            </thead>
+	            <tbody>
+	              {{#each yieldsList}}
+	                <tr>
+	                  <td>{{cropYear}}</td>
+	                  <td>{{yields}}</td>
+	                  <td>
+	                  	{{#afModal formId="deleteYield" title=deleteYieldTitle buttonContent=deleteYieldButtonContent class="btn btn-danger btn-sm" collection="Yields" operation="remove" doc=this._id prompt=deleteYieldPrompt}}
+					  		{{_ "delete"}}
+						{{/afModal}}
+					</td>
+	                </tr>
+	              {{/each}}
+	            </tbody>
+	          </table>
+	        {{/if}}
+			</div>
+			<div class="panel-footer">
+				<a href="{{pathFor 'yieldAdd'}}" class="btn btn-primary">{{_ "add"}}</a>
+			</div>			
+	</div>
+</template>
 
 
 <template name="map">
@@ -147,11 +333,6 @@
 				<h3 class="panel-title">{{_ "edit_post_btn"}}</h3>
 			</div>
 			<div class="panel-body">
-				<span class="pull-right">
-					{{#afModal formId="deletePost" title=deletePostTitle buttonContent=deletePostButtonContent class="btn btn-danger" collection="Posts" operation="remove" doc=this._id prompt=deletePostPrompt}}
-					  {{_ "delete"}}
-					{{/afModal}}
-				</span>
 				{{#autoForm id="editPost" collection="Posts" type="update" doc=this}}
 				{{> afQuickField name="title"}}
 				{{> afQuickField name="content"}}
@@ -186,7 +367,7 @@
 <template name="postPage">
 	<h3>{{_ "farmName"}}: {{title}}</h3> {{_ "farmArea"}}: {{calculateArea geometry}} {{_ "hectares"}}
 	{{#if $eq owner User._id}}
-		<a href="{{pathFor 'postEdit'}}" class="btn btn-primary align-right">{{_ "edit_post_btn"}}</a>
+		<a href="{{pathFor 'postEdit'}}" class="btn btn-primary pull-right">{{_ "edit_post_btn"}}</a>
 	{{/if}}
 	<div class="panel panel-default">
 			<div class="panel-heading">
@@ -234,48 +415,36 @@
 	          {{_ "no_crop_message"}}
 	        {{else}}
 	           {{_ "in_most_recent_year_of"}} {{cropsListInMostRecentYear.year}} {{_ "this_farm_has_following_crops"}} <strong>{{cropsListInMostRecentYear.crop}}</strong>{{_ "view_crop_message"}}
-<!--	          <table class="table table-hover">
-	            <thead>
-	              <tr>
-	                <th>{{_ "crops"}}</th>
-	                <th>{{_ "year"}}</th>
-	              </tr>
-	            </thead>
-	            <tbody>
-	              {{#each cropsListInMostRecentYear}}
-	                <tr>
-	                  <td>{{crop}}</td>
-	                  <td>{{year}}</td>
-	                </tr>
-	              {{/each}}
-	            </tbody>
-	          </table>-->
 	        {{/if}}
 			</div>
 			<div class="panel-footer">
 				{{#if isCropsZero}}
-				<a href="{{pathFor 'cropAdd'}}" class="btn btn-success btn-sm">{{_ "add"}}</a>
 				{{else}}
-				<a href="{{pathFor 'cropEdit'}}" class="btn btn-primary btn-sm">{{_ "edit_post_btn"}}</a>
 				<a href="{{pathFor 'cropView'}}" class="btn btn-success btn-sm">{{_ "view_post_btn"}}</a>
 				{{/if}}
+				<a href="{{pathFor 'cropEdit'}}" class="btn btn-primary btn-sm">{{_ "edit_post_btn"}}</a>
 			</div>
 	</div>
+	{{#if isCropsZero}}
+    {{else}}
 	<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title">{{_ "activities"}}
 				</h3>
 			</div>
 			<div class="panel-body">
-				{{_ "realtime"}}: 15°C <input type="submit" value="{{_ "hours36"}}" class="btn btn-success btn-sm"/> 
-				<input type="submit" value="{{_ "days3"}}" class="btn btn-success btn-sm"/>
-				<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
-				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>
+			{{#if isActivitiesZero}}
+	          {{_ "no_activities_message"}}
+	        {{else}}
+	           {{recent_activities_message}}
+	        {{/if}}
 			</div>
 			<div class="panel-footer">
-				{{> favoriteButton _id=_id}}
-				{{> commentFormToggle }}
-				{{> comments}}
+				{{#if isActivitiesZero}}
+				{{else}}
+				<a href="{{pathFor 'activityView'}}" class="btn btn-success btn-sm">{{_ "view_post_btn"}}</a>
+				{{/if}}
+				<a href="{{pathFor 'activityEdit'}}" class="btn btn-primary btn-sm">{{_ "edit_post_btn"}}</a>
 			</div>
 	</div>
 	<div class="panel panel-default">
@@ -284,17 +453,37 @@
 				</h3>
 			</div>
 			<div class="panel-body">
-				{{_ "realtime"}}: 15°C <input type="submit" value="{{_ "hours36"}}" class="btn btn-success btn-sm"/> 
-				<input type="submit" value="{{_ "days3"}}" class="btn btn-success btn-sm"/>
-				<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
-				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>
+			{{#if isYieldsZero}}
+	          {{_ "no_yields_message"}}
+	        {{else}}
+	          {{_ "recent_yields_message"}}
+	          <table class="table table-hover">
+	            <thead>
+	              <tr>
+	                <th>{{_ "crops"}}</th>
+	                <th>{{_ "yields"}} ({{_ "kg"}})</th>
+	              </tr>
+	            </thead>
+	            <tbody>
+	              {{#each recentYields}}
+	                <tr>
+	                  <td>{{cropYear}}</td>
+	                  <td>{{yields}}</td>
+	                </tr>
+	              {{/each}}
+	            </tbody>
+	          </table>
+	        {{/if}}
 			</div>
 			<div class="panel-footer">
-				{{> favoriteButton _id=_id}}
-				{{> commentFormToggle }}
-				{{> comments}}
+				{{#if isYieldsZero}}
+				{{else}}
+				<a href="{{pathFor 'yieldView'}}" class="btn btn-success btn-sm">{{_ "view_post_btn"}}</a>
+				{{/if}}
+				<a href="{{pathFor 'yieldEdit'}}" class="btn btn-primary btn-sm">{{_ "edit_post_btn"}}</a>
 			</div>
 	</div>
+    {{/if}}
 
 </template>
 <template name="posts">
@@ -338,6 +527,11 @@
 								{{/if}}
 							</div>
 						</div>-->
+						{{#if $eq owner User._id}}
+							{{#afModal formId="deletePost" title=deletePostTitle buttonContent=deletePostButtonContent class="btn btn-danger btn-sm pull-right" collection="Posts" operation="remove" doc=this._id prompt=deletePostPrompt}}
+							  {{_ "delete"}}
+							{{/afModal}}
+						{{/if}}
 					</div>
 					<div class="panel-footer">
 						<!--{{> favoriteButton _id=_id}}

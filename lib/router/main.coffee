@@ -42,7 +42,11 @@ Router.map ->
   @route "postPage",
     path: "/posts/:_id"
     waitOn: ->
-      Meteor.subscribe 'crops', this.params._id
+      [
+        Meteor.subscribe 'crops', this.params._id
+        Meteor.subscribe 'activities', this.params._id
+        Meteor.subscribe 'yields', this.params._id
+      ]
     data: ->
       Posts.findOne(this.params._id)
 
@@ -69,5 +73,65 @@ Router.map ->
     path: "/posts/:_id/cropEdit"
     waitOn: ->
       Meteor.subscribe 'crops', this.params._id
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "activityAdd",
+    path: "/posts/:_id/activityAdd"
+    waitOn: ->
+      [
+        Meteor.subscribe 'crops', this.params._id
+        Meteor.subscribe 'activities', this.params._id
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "activityView",
+    path: "/posts/:_id/activityView"
+    waitOn: ->
+      [
+        Meteor.subscribe 'crops', this.params._id
+        Meteor.subscribe 'activities', this.params._id
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "activityEdit",
+    path: "/posts/:_id/activityEdit"
+    waitOn: ->
+      [
+        Meteor.subscribe 'crops', this.params._id
+        Meteor.subscribe 'activities', this.params._id
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "yieldAdd",
+    path: "/posts/:_id/yieldAdd"
+    waitOn: ->
+      [
+        Meteor.subscribe 'crops', this.params._id
+        Meteor.subscribe 'yields', this.params._id
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "yieldView",
+    path: "/posts/:_id/yieldView"
+    waitOn: ->
+      [
+        Meteor.subscribe 'crops', this.params._id
+        Meteor.subscribe 'yields', this.params._id
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "yieldEdit",
+    path: "/posts/:_id/yieldEdit"
+    waitOn: ->
+      [
+        Meteor.subscribe 'crops', this.params._id
+        Meteor.subscribe 'yields', this.params._id
+      ]
     data: ->
       Posts.findOne(this.params._id)
