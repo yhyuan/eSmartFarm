@@ -61,14 +61,68 @@
 			</div>
 			<div class="panel-body">
 				{{#autoForm id="addCrop" collection="Crops" type="insert"}}
-				{{> afQuickField name="crop" options=cropOptions value=cropValue firstOption=SelectOne}}
+				{{> afQuickField name="crop" options=cropOptions firstOption=SelectOne noselect=true}}
 				{{> afQuickField name="year" options=yearOptions value=yearValue firstOption=SelectOne}}
-				<div id="geometryField" style="display:none;">{{> afQuickField name="farmId"}}</div>				
+				<div id="farmIdField" style="display:none;">{{> afQuickField name="farmId" value=farmIdValue}}</div>				
 				<button type="submit" class="btn btn-primary" id="submitFarmBtn">{{_ "add"}}</button>
 				{{/autoForm}}
 			</div>
 	</div>
 </template>
+
+<template name="cropView">
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{_ "view_post_btn"}}{{_ "crops"}}</h3>
+			</div>
+			<div class="panel-body">
+	          <table class="table table-hover">
+	            <thead>
+	              <tr>
+	                <th>{{_ "crops"}}</th>
+	                <th>{{_ "year"}}</th>
+	              </tr>
+	            </thead>
+	            <tbody>
+	              {{#each cropsList}}
+	                <tr>
+	                  <td>{{crop}}</td>
+	                  <td>{{year}}</td>
+	                </tr>
+	              {{/each}}
+	            </tbody>
+	          </table>
+		</div>
+	</div>
+</template>
+
+<template name="cropEdit">
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{_ "edit_post_btn"}}{{_ "crops"}}</h3>
+			</div>
+			<div class="panel-body">
+	          <table class="table table-hover">
+	            <thead>
+	              <tr>
+	                <th>{{_ "crops"}}</th>
+	                <th>{{_ "year"}}</th>
+	              </tr>
+	            </thead>
+	            <tbody>
+	              {{#each cropsList}}
+	                <tr>
+	                  <td>{{crop}}</td>
+	                  <td>{{year}}</td>
+	                </tr>
+	              {{/each}}
+	            </tbody>
+	          </table>
+			</div>
+	</div>
+</template>
+
+
 
 
 
@@ -176,11 +230,11 @@
 				</h3>
 			</div>
 			<div class="panel-body">
-			{{#if isCropsInCurrentYearZero}}
+			{{#if isCropsZero}}
 	          {{_ "no_crop_message"}}
 	        {{else}}
-	          <input type="submit" value="{{_ "edit"}}" class="btn btn-success btn-sm"/>
-	          <table class="table table-hover">
+	           {{_ "in_most_recent_year_of"}} {{cropsListInMostRecentYear.year}} {{_ "this_farm_has_following_crops"}} <strong>{{cropsListInMostRecentYear.crop}}</strong>{{_ "view_crop_message"}}
+<!--	          <table class="table table-hover">
 	            <thead>
 	              <tr>
 	                <th>{{_ "crops"}}</th>
@@ -188,22 +242,22 @@
 	              </tr>
 	            </thead>
 	            <tbody>
-	              {{#each cropsListInCurrentYear}}
+	              {{#each cropsListInMostRecentYear}}
 	                <tr>
 	                  <td>{{crop}}</td>
 	                  <td>{{year}}</td>
 	                </tr>
 	              {{/each}}
 	            </tbody>
-	          </table>
+	          </table>-->
 	        {{/if}}
 			</div>
 			<div class="panel-footer">
-			<a href="{{pathFor 'cropAdd'}}" class="btn btn-success btn-sm">{{_ "add"}}</a>
-				{{#if isCropsInCurrentYearZero}}
-
+				{{#if isCropsZero}}
+				<a href="{{pathFor 'cropAdd'}}" class="btn btn-success btn-sm">{{_ "add"}}</a>
 				{{else}}
-				<input type="button" value="{{_ "edit"}}" class="btn btn-primary btn-sm"/> 
+				<a href="{{pathFor 'cropEdit'}}" class="btn btn-primary btn-sm">{{_ "edit_post_btn"}}</a>
+				<a href="{{pathFor 'cropView'}}" class="btn btn-success btn-sm">{{_ "view_post_btn"}}</a>
 				{{/if}}
 			</div>
 	</div>

@@ -89,6 +89,10 @@
 	"edit": "编辑",
 	"no_crop_message": "本农场目前没有农作物信息，请添加农作物信息。",
 	"SelectOne": "请选择",
+	"in_most_recent_year_of": "在最近的",
+	"this_farm_has_following_crops": "年，本农场有以下农作物：",
+	"view_crop_message": "。若需查看农作物历史记录，请点击查看。",
+
 	/*Account*/
 	"account_details": "账户细节",
 	"delete_account": "删除账户",

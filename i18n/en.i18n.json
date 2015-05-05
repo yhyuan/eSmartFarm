@@ -87,8 +87,12 @@
 	"year": "Year",
 	"add": "Add",
 	"edit": "Edit",
-	"no_crop_message": "There is no cropsinformation for current year. Please use Add tool to add crop information.",
+	"no_crop_message": "There is no cropsinformation. Please use Add tool to add crop information.",
 	"SelectOne": "Select One",
+	"in_most_recent_year_of": "In the most recent year of ",
+	"this_farm_has_following_crops": "this farm has the followign crops: ",
+	"view_crop_message": ". If you want to view historical crops information, please click on the View button.",
+
 	/*Account*/
 	"account_details": "Account Details",
 	"delete_account": "Delete Account",

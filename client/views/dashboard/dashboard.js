@@ -16,9 +16,6 @@ Template.cropAdd.helpers({
             return {label: "" + crop, value: crop};
         });
     },
-    cropValue: function() {
-        return "小麦";
-    },    
     yearOptions: function() {
         return _.map(_.range(new Date().getFullYear(), 2000, -1), function(year) {
             return {label: "" + year, value: year};
@@ -29,15 +26,33 @@ Template.cropAdd.helpers({
     },
     SelectOne: function() {
         return TAPi18n.__('SelectOne');
+    },
+    farmIdValue: function() {
+        return this._id;
+    }
+});
+
+Template.cropView.helpers({
+    cropsList: function() {
+        return Crops.find();
+    }
+});
+
+Template.cropEdit.helpers({
+    cropsList: function() {
+        return Crops.find();
     }
 });
 
 Template.postPage.helpers({
-    isCropsInCurrentYearZero: function() {
-        return Crops.find({year : new Date().getFullYear()}).count() === 0;
+    isCropsZero: function() {
+        //return Crops.find({year : new Date().getFullYear()}).count() === 0;
+        return Crops.find().count() === 0;
     },
-    cropsListInCurrentYear: function() {
-        return Crops.find({year : new Date().getFullYear()});
+    cropsListInMostRecentYear: function() {
+        var crops = Crops.find().fetch();
+        var crop = _.max(crops, function(crop){ return crop.year;});
+        return crop;
     }
 });
 
@@ -94,7 +109,7 @@ Template.postSubmit.events({
         $('[name="geometry"]').val(coordinates.join(';'));
     }
 });
-AutoForm.addHooks(['addPost', 'editPost'], {
+AutoForm.addHooks(['addPost', 'editPost', 'addCrop'], {
     onSuccess: function(operation, result, template) {
         Router.go("/dashboard");
     }
