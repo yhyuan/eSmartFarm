@@ -22,8 +22,10 @@ Meteor.publish 'devices',  (latlng)->
 				$minDistance: 0
 				$maxDistance: 15000
 
-Meteor.publish 'hourlys', (deviceId) ->
-	Hourlys.find deviceId : deviceId
+Meteor.publish 'hourlys',(param) ->
+	Hourlys.find 
+		deviceId : param.deviceId
+		param.options
 
 Meteor.publish 'attachments', ->
 	Attachments.find()

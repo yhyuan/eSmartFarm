@@ -363,6 +363,32 @@
 			</div>
 	</div>
 </template>
+<template name="airTemp36Hours">
+	<h3>{{_ "farmName"}}: {{title}}</h3>
+	<div id='chart'></div>
+</template>
+<template name="airTemp72Hours">
+	<h3>{{_ "farmName"}}: {{title}}</h3>
+	<div id='chart'></div>
+</template>
+
+<template name="soilTemp36Hours">
+	<h3>{{_ "farmName"}}: {{title}}</h3>
+	<div id='chart'></div>
+</template>
+<template name="soilTemp72Hours">
+	<h3>{{_ "farmName"}}: {{title}}</h3>
+	<div id='chart'></div>
+</template>
+
+<template name="rainfall36Hours">
+	<h3>{{_ "farmName"}}: {{title}}</h3>
+	<div id='chart'></div>
+</template>
+<template name="rainfall72Hours">
+	<h3>{{_ "farmName"}}: {{title}}</h3>
+	<div id='chart'></div>
+</template>
 
 <template name="postPage">
 	<h3>{{_ "farmName"}}: {{title}}</h3> {{_ "farmArea"}}: {{calculateArea geometry}} {{_ "hectares"}}
@@ -371,14 +397,14 @@
 	{{/if}}
 	<div class="panel panel-default">
 			<div class="panel-heading">
-				<h3 class="panel-title">{{_ "temperature"}}
+				<h3 class="panel-title">{{_ "air"}}{{_ "temperature"}}
 				</h3>
 			</div>
 			<div class="panel-body">
-				{{_ "realtime"}}: 15°C <input type="submit" value="{{_ "hours36"}}" class="btn btn-success btn-sm"/> 
-				<input type="submit" value="{{_ "days3"}}" class="btn btn-success btn-sm"/>
-				<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
-				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>
+				{{_ "realtime"}}: 15°C <a href="{{pathFor 'airTemp36Hours'}}" class="btn btn-success btn-sm">{{_ "hours36"}}</a>
+				<a href="{{pathFor 'airTemp72Hours'}}" class="btn btn-success btn-sm">{{_ "days3"}}</a>
+				<!--<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
+				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>-->
 			</div>
 	</div>
 	<div class="panel panel-default">
@@ -387,22 +413,22 @@
 				</h3>
 			</div>
 			<div class="panel-body">
-				{{_ "realtime"}}: 15°C <input type="submit" value="{{_ "hours36"}}" class="btn btn-success btn-sm"/> 
-				<input type="submit" value="{{_ "days3"}}" class="btn btn-success btn-sm"/>
-				<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
-				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>
+				{{_ "realtime"}}: 15°C <a href="{{pathFor 'rainfall36Hours'}}" class="btn btn-success btn-sm">{{_ "hours36"}}</a>
+				<a href="{{pathFor 'rainfall72Hours'}}" class="btn btn-success btn-sm">{{_ "days3"}}</a>
+				<!--<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
+				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>-->
 			</div>
 	</div>
 	<div class="panel panel-default">
 			<div class="panel-heading">
-				<h3 class="panel-title">{{_ "soil"}}
+				<h3 class="panel-title">{{_ "soil"}}{{_ "temperature"}}
 				</h3>
 			</div>
 			<div class="panel-body">
-				{{_ "realtime"}}: 15°C <input type="button" value="{{_ "hours36"}}" class="btn btn-success btn-sm"/> 
-				<input type="button" value="{{_ "days3"}}" class="btn btn-success btn-sm"/>
-				<input type="button" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
-				<input type="button" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>
+				{{_ "realtime"}}: 15°C <a href="{{pathFor 'soilTemp36Hours'}}" class="btn btn-success btn-sm">{{_ "hours36"}}</a>
+				<a href="{{pathFor 'soilTemp72Hours'}}" class="btn btn-success btn-sm">{{_ "days3"}}</a>
+				<!--<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
+				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>-->
 			</div>
 	</div>
 	<div class="panel panel-default">

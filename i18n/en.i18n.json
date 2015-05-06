@@ -80,6 +80,8 @@
 	"growingSeason": "Growing Season",
 	"nextSeason": "Next Season",
 	"precipitation": "Precipitation",
+	"humidity": "Humidity",
+	"air": "Air",
 	"soil": "Soil",
 	"crops": "Crops",
 	"activities": "Activities",

@@ -209,6 +209,60 @@ Template.postPage.helpers({
     }
 });
 
+Template.postPage.rendered = function() {
+    Session.set("currentDeviceId", Devices.findOne().deviceId);
+};
+
+var chartCallback = function() {
+    var hourlyData = Hourlys.find().fetch();
+    if (hourlyData[0].hasOwnProperty('airtemp')) {
+        var data = ([TAPi18n.__('temperature')]).concat(_.map(hourlyData, function(item){return item.airtemp;}));
+    }
+    if (hourlyData[0].hasOwnProperty('soiltemp')) {
+        var data = ([TAPi18n.__('temperature')]).concat(_.map(hourlyData, function(item){return item.soiltemp;}));
+    }
+    if (hourlyData[0].hasOwnProperty('rainfall')) {
+        var data = ([TAPi18n.__('precipitation')]).concat(_.map(hourlyData, function(item){return item.rainfall;}));
+    }
+
+    var convertTime = function(time) {
+        var yyyy = time.getFullYear().toString();
+        var mm = (time.getMonth()+1).toString(); // getMonth() is zero-based
+        var dd  = time.getDate().toString();
+        var hh  = time.getHours().toString();
+        var MM  = time.getMinutes().toString();
+        var ss  = time.getSeconds().toString();
+        return yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]) + ' ' + (hh[1]?hh:"0"+hh[0]) + ':' + (MM[1]?MM:"0"+MM[0]) + ':' + (ss[1]?ss:"0"+ss[0]); // padding        
+    };
+    var hours = (['x']).concat(_.map(hourlyData, function(item){return convertTime(item.uploadTime);}));
+    var chart = c3.generate({
+        data: {
+            x: 'x',
+            xFormat: '%Y-%m-%d %H:%M:%S',
+            columns: [
+                hours,
+                data
+            ]
+        },
+        axis: {
+            x: {
+                type: 'timeseries',
+                tick: {
+                    format: '%Y-%m-%d %H:%M:%S'
+                }
+            }
+        }
+    });
+};
+Template.airTemp36Hours.rendered = chartCallback;
+Template.airTemp72Hours.rendered = chartCallback;
+
+Template.soilTemp36Hours.rendered = chartCallback;
+Template.soilTemp72Hours.rendered = chartCallback;
+
+Template.rainfall36Hours.rendered = chartCallback;
+Template.rainfall72Hours.rendered = chartCallback;
+
 Template.postEdit.helpers({
     addFieldStepIs: function(step) {
         return Session.get("addFieldStep") === step;
@@ -249,7 +303,6 @@ Template.postSubmit.events({
 });
 AutoForm.addHooks(['addPost', 'editPost'], {
     onSuccess: function(operation, result, template) {
-        console.log(result);
         Router.go("/dashboard");
     }
 });
