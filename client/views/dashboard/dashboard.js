@@ -206,62 +206,62 @@ Template.postPage.helpers({
         return _.filter(yields, function(y) {
             return y.cropYear.indexOf(recentYear) >= 0;
         });
-    }
+    },
+    realtimeAirTemperature: function () {
+        return Hourlys.findOne().airtemp;
+    },
+    realtimePrecipitation: function () {
+        return Hourlys.findOne().rainfall;
+    },
+    realtimeSoilTemperature: function () {
+        return Hourlys.findOne().soiltemp;
+    }    
 });
 
-Template.postPage.rendered = function() {
-    Session.set("currentDeviceId", Devices.findOne().deviceId);
-};
-
-var chartCallback = function() {
-    var hourlyData = Hourlys.find().fetch();
-    if (hourlyData[0].hasOwnProperty('airtemp')) {
-        var data = ([TAPi18n.__('temperature')]).concat(_.map(hourlyData, function(item){return item.airtemp;}));
-    }
-    if (hourlyData[0].hasOwnProperty('soiltemp')) {
-        var data = ([TAPi18n.__('temperature')]).concat(_.map(hourlyData, function(item){return item.soiltemp;}));
-    }
-    if (hourlyData[0].hasOwnProperty('rainfall')) {
-        var data = ([TAPi18n.__('precipitation')]).concat(_.map(hourlyData, function(item){return item.rainfall;}));
-    }
-
-    var convertTime = function(time) {
-        var yyyy = time.getFullYear().toString();
-        var mm = (time.getMonth()+1).toString(); // getMonth() is zero-based
-        var dd  = time.getDate().toString();
-        var hh  = time.getHours().toString();
-        var MM  = time.getMinutes().toString();
-        var ss  = time.getSeconds().toString();
-        return yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]) + ' ' + (hh[1]?hh:"0"+hh[0]) + ':' + (MM[1]?MM:"0"+MM[0]) + ':' + (ss[1]?ss:"0"+ss[0]); // padding        
-    };
-    var hours = (['x']).concat(_.map(hourlyData, function(item){return convertTime(item.uploadTime);}));
-    var chart = c3.generate({
-        data: {
-            x: 'x',
-            xFormat: '%Y-%m-%d %H:%M:%S',
-            columns: [
-                hours,
-                data
-            ]
-        },
-        axis: {
-            x: {
-                type: 'timeseries',
-                tick: {
-                    format: '%Y-%m-%d %H:%M:%S'
+var chartCallback = function(type) {
+    var name = (type === 'rainfall') ? 'precipitation' : 'temperature';
+    return function () {
+        var hourlyData = Hourlys.find().fetch();
+        var data = ([TAPi18n.__(name)]).concat(_.map(hourlyData, function(item){return item[type];}));
+        var convertTime = function(time) {
+            var yyyy = time.getFullYear().toString();
+            var mm = (time.getMonth()+1).toString(); // getMonth() is zero-based
+            var dd  = time.getDate().toString();
+            var hh  = time.getHours().toString();
+            var MM  = time.getMinutes().toString();
+            var ss  = time.getSeconds().toString();
+            return yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]) + ' ' + (hh[1]?hh:"0"+hh[0]) + ':' + (MM[1]?MM:"0"+MM[0]) + ':' + (ss[1]?ss:"0"+ss[0]); // padding        
+        };
+        var hours = (['x']).concat(_.map(hourlyData, function(item){return convertTime(item.uploadTime);}));
+        var chart = c3.generate({
+            data: {
+                x: 'x',
+                xFormat: '%Y-%m-%d %H:%M:%S',
+                columns: [
+                    hours,
+                    data
+                ]
+            },
+            axis: {
+                x: {
+                    type: 'timeseries',
+                    tick: {
+                        format: '%Y-%m-%d %H:%M:%S'
+                    }
                 }
             }
-        }
-    });
+        });        
+    };
 };
-Template.airTemp36Hours.rendered = chartCallback;
-Template.airTemp72Hours.rendered = chartCallback;
 
-Template.soilTemp36Hours.rendered = chartCallback;
-Template.soilTemp72Hours.rendered = chartCallback;
+Template.airTemp36Hours.rendered = chartCallback('airtemp');
+Template.airTemp72Hours.rendered = chartCallback('airtemp');
 
-Template.rainfall36Hours.rendered = chartCallback;
-Template.rainfall72Hours.rendered = chartCallback;
+Template.soilTemp36Hours.rendered = chartCallback('soiltemp');
+Template.soilTemp72Hours.rendered = chartCallback('soiltemp');
+
+Template.rainfall36Hours.rendered = chartCallback('rainfall');
+Template.rainfall72Hours.rendered = chartCallback('rainfall');
 
 Template.postEdit.helpers({
     addFieldStepIs: function(step) {
@@ -295,9 +295,25 @@ Template.postSubmit.events({
         Session.set('addFieldStep', 'sixthStep');
         $("#" + Config.mapDivID).hide();
         $("#submitFarmBtn").toggle();
+        var lng = _.reduce(markers, function(total, makrer){ return total + makrer.getLatLng().lng; }, 0)/markers.length;
+        var lat = _.reduce(markers, function(total, makrer){ return total + makrer.getLatLng().lat; }, 0)/markers.length;
+        var deviceId = Devices.findOne({
+            location: {
+                $near: {
+                    $geometry: {
+                        type: "Point", 
+                        coordinates:[ lng, lat]
+                    },
+                    $minDistance: 0,
+                    $maxDistance: 15000                    
+                }
+            }
+        }).deviceId;
+        $('[name="deviceId"]').val(deviceId);
+
         var coordinates = _.map(markers, function(m) {
             return m.getLatLng().lng.toFixed(7) + ',' + m.getLatLng().lat.toFixed(7);
-        })
+        });
         $('[name="geometry"]').val(coordinates.join(';'));
     }
 });

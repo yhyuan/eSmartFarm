@@ -26,7 +26,10 @@
 				{{> afQuickField name="title"}}
 				{{> afQuickField name="content"}}
 <!--			{{> afQuickField name="picture" remove-label='删除'}}-->
-				<div id="geometryField" style="display:none;">{{> afQuickField name="geometry"}}</div>
+				<div id="geometryField" style="display:none;">
+					{{> afQuickField name="geometry"}}
+					{{> afQuickField name="deviceId"}}
+				</div>
 				
 				{{#if addFieldStepIs "firstStep"}}
 					<div id="message"> {{_ "findLocationMessage"}} <input type="button" value="{{_ "start"}}" class="btn btn-success btn-sm" id='addFieldStartButton'/></div>
@@ -337,7 +340,10 @@
 				{{> afQuickField name="title"}}
 				{{> afQuickField name="content"}}
 <!--			{{> afQuickField name="picture" remove-label='删除'}}-->
-				<div id="geometryField" style="display:none;">{{> afQuickField name="geometry"}}</div>
+				<div id="geometryField" style="display:none;">
+					{{> afQuickField name="geometry"}}
+					{{> afQuickField name="deviceId"}}
+				</div>
 				{{#if addFieldStepIs "firstStep"}}
 					<div id="message"> {{_ "findLocationMessage"}} <input type="button" value="{{_ "start"}}" class="btn btn-success btn-sm" id='addFieldStartButton'/></div>
 				{{/if}}
@@ -364,28 +370,34 @@
 	</div>
 </template>
 <template name="airTemp36Hours">
+	<a href="{{pathFor 'postPage'}}" class="btn btn-primary pull-right">{{_ "close"}}</a>
 	<h3>{{_ "farmName"}}: {{title}}</h3>
 	<div id='chart'></div>
 </template>
 <template name="airTemp72Hours">
+	<a href="{{pathFor 'postPage'}}" class="btn btn-primary pull-right">{{_ "close"}}</a>
 	<h3>{{_ "farmName"}}: {{title}}</h3>
 	<div id='chart'></div>
 </template>
 
 <template name="soilTemp36Hours">
+	<a href="{{pathFor 'postPage'}}" class="btn btn-primary pull-right">{{_ "close"}}</a>
 	<h3>{{_ "farmName"}}: {{title}}</h3>
 	<div id='chart'></div>
 </template>
 <template name="soilTemp72Hours">
+	<a href="{{pathFor 'postPage'}}" class="btn btn-primary pull-right">{{_ "close"}}</a>
 	<h3>{{_ "farmName"}}: {{title}}</h3>
 	<div id='chart'></div>
 </template>
 
 <template name="rainfall36Hours">
+	<a href="{{pathFor 'postPage'}}" class="btn btn-primary pull-right">{{_ "close"}}</a>
 	<h3>{{_ "farmName"}}: {{title}}</h3>
 	<div id='chart'></div>
 </template>
 <template name="rainfall72Hours">
+	<a href="{{pathFor 'postPage'}}" class="btn btn-primary pull-right">{{_ "close"}}</a>
 	<h3>{{_ "farmName"}}: {{title}}</h3>
 	<div id='chart'></div>
 </template>
@@ -401,7 +413,8 @@
 				</h3>
 			</div>
 			<div class="panel-body">
-				{{_ "realtime"}}: 15°C <a href="{{pathFor 'airTemp36Hours'}}" class="btn btn-success btn-sm">{{_ "hours36"}}</a>
+				{{_ "realtime"}} {{realtimeAirTemperature}} &deg;C
+				<a href="{{pathFor 'airTemp36Hours'}}" class="btn btn-success btn-sm">{{_ "hours36"}}</a>
 				<a href="{{pathFor 'airTemp72Hours'}}" class="btn btn-success btn-sm">{{_ "days3"}}</a>
 				<!--<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
 				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>-->
@@ -413,7 +426,8 @@
 				</h3>
 			</div>
 			<div class="panel-body">
-				{{_ "realtime"}}: 15°C <a href="{{pathFor 'rainfall36Hours'}}" class="btn btn-success btn-sm">{{_ "hours36"}}</a>
+				{{_ "realtime"}} {{realtimePrecipitation}} mm
+				<a href="{{pathFor 'rainfall36Hours'}}" class="btn btn-success btn-sm">{{_ "hours36"}}</a>
 				<a href="{{pathFor 'rainfall72Hours'}}" class="btn btn-success btn-sm">{{_ "days3"}}</a>
 				<!--<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
 				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>-->
@@ -425,7 +439,8 @@
 				</h3>
 			</div>
 			<div class="panel-body">
-				{{_ "realtime"}}: 15°C <a href="{{pathFor 'soilTemp36Hours'}}" class="btn btn-success btn-sm">{{_ "hours36"}}</a>
+				{{_ "realtime"}} {{realtimeSoilTemperature}}  &deg;C
+				<a href="{{pathFor 'soilTemp36Hours'}}" class="btn btn-success btn-sm">{{_ "hours36"}}</a>
 				<a href="{{pathFor 'soilTemp72Hours'}}" class="btn btn-success btn-sm">{{_ "days3"}}</a>
 				<!--<input type="submit" value="{{_ "growingSeason"}}" class="btn btn-success btn-sm"/> 
 				<input type="submit" value="{{_ "nextSeason"}}" class="btn btn-success btn-sm"/>-->

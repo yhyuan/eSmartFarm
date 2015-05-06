@@ -1,4 +1,12 @@
 @Posts = new Meteor.Collection('posts');
+calculateCenter = (geometry) ->
+	lnglats = _.map geometry.split(';'), (lnglatString) -> (_.map lnglatString.split(','), (str) -> parseFloat(str))
+	avglng = (_.reduce lnglats, ((memo, num) -> memo + num[0]), 0)/lnglats.length
+	avglat = (_.reduce lnglats, ((memo, num) -> memo + num[1]), 0)/lnglats.length
+	return {
+		"type": "Point",
+		"coordinates": [avglng, avglat]
+	}	
 
 Schemas.Posts = new SimpleSchema
 	title:
@@ -9,6 +17,16 @@ Schemas.Posts = new SimpleSchema
 
 	geometry:
 		type: String
+
+	center:
+		type: Schemas.Location
+		index: '2dsphere'
+		autoValue: ->
+			calculateCenter (this.field('geometry').value)
+
+	deviceId:
+		type:String
+		optional:true
 
 	content:
 		type: String
