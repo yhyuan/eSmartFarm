@@ -45,8 +45,8 @@ if ( Devices.find().count() === 0 ) {
         }
     });
     Devices.insert({
-        deviceName: "育种基地",
-        deviceId: '18801415650',
+        deviceName: "植物中心",
+        deviceId: '18811799744',
         location: {
             "type": "Point",
             "coordinates": [
