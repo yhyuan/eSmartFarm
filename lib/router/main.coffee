@@ -9,6 +9,10 @@ calculateCenter = (_id) ->
     lat: avglat
   }
 
+getDeviceId = () ->
+  device = Devices.findOne()
+  device.deviceId
+
 Router.map ->
   @route "home",
     path: "/"
@@ -147,3 +151,148 @@ Router.map ->
       ]
     data: ->
       Posts.findOne(this.params._id)
+
+  @route "airTemp36Hours",
+    path: "/posts/:_id/airTemp36Hours"
+    waitOn: ->
+      [
+        Meteor.subscribe 'hourlys', getDeviceId(this.params._id)
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "airTemp3Days",
+    path: "/posts/:_id/airTemp3Days"
+    waitOn: ->
+      [
+        Meteor.subscribe 'hourlys', getDeviceId(this.params._id)
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "airHumidity36Hours",
+    path: "/posts/:_id/airHumidity36Hours"
+    waitOn: ->
+      [
+        Meteor.subscribe 'hourlys', getDeviceId(this.params._id)
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "airHumidity3Days",
+    path: "/posts/:_id/airHumidity3Days"
+    waitOn: ->
+      [
+        Meteor.subscribe 'hourlys', getDeviceId(this.params._id)
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "atmosphericPressure36Hours",
+    path: "/posts/:_id/atmosphericPressure36Hours"
+    waitOn: ->
+      [
+        Meteor.subscribe 'hourlys', getDeviceId(this.params._id)
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "atmosphericPressure3Days",
+    path: "/posts/:_id/atmosphericPressure3Days"
+    waitOn: ->
+      [
+        Meteor.subscribe 'hourlys', getDeviceId(this.params._id)
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "soilTemp36Hours",
+    path: "/posts/:_id/soilTemp36Hours"
+    waitOn: ->
+      [
+        Meteor.subscribe 'hourlys', getDeviceId(this.params._id)
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "soilTemp3Days",
+    path: "/posts/:_id/soilTemp3Days"
+    waitOn: ->
+      [
+        Meteor.subscribe 'hourlys', getDeviceId(this.params._id)
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "soilHumidity36Hours",
+    path: "/posts/:_id/soilHumidity36Hours"
+    waitOn: ->
+      [
+        Meteor.subscribe 'hourlys', getDeviceId(this.params._id)
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "soilHumidity3Days",
+    path: "/posts/:_id/soilHumidity3Days"
+    waitOn: ->
+      [
+        Meteor.subscribe 'hourlys', getDeviceId(this.params._id)
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "windSpeed36Hours",
+    path: "/posts/:_id/windSpeed36Hours"
+    waitOn: ->
+      [
+        Meteor.subscribe 'hourlys', getDeviceId(this.params._id)
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "windSpeed3Days",
+    path: "/posts/:_id/windSpeed3Days"
+    waitOn: ->
+      [
+        Meteor.subscribe 'hourlys', getDeviceId(this.params._id)
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "windDirection36Hours",
+    path: "/posts/:_id/windDirection36Hours"
+    waitOn: ->
+      [
+        Meteor.subscribe 'hourlys', getDeviceId(this.params._id)
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "windDirection3Days",
+    path: "/posts/:_id/windDirection3Days"
+    waitOn: ->
+      [
+        Meteor.subscribe 'hourlys', getDeviceId(this.params._id)
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "rainfall36Hours",
+    path: "/posts/:_id/rainfall36Hours"
+    waitOn: ->
+      [
+        Meteor.subscribe 'hourlys', getDeviceId(this.params._id)
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
+  @route "rainfall3Days",
+    path: "/posts/:_id/rainfall3Days"
+    waitOn: ->
+      [
+        Meteor.subscribe 'hourlys', getDeviceId(this.params._id)
+      ]
+    data: ->
+      Posts.findOne(this.params._id)
+
