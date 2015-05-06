@@ -10,5 +10,17 @@ Meteor.publish 'activities', (farmId) ->
 Meteor.publish 'yields', (farmId) ->
 	Yields.find farmId : farmId
 
+Meteor.publish 'devices',  (latlng)->
+	Devices.find
+		location:
+			$near:
+				$geometry:
+					type: 
+						"Point"
+					coordinates:
+						[ latlng.lng, latlng.lat ]
+				$minDistance: 0
+				$maxDistance: 15000
+
 Meteor.publish 'attachments', ->
 	Attachments.find()

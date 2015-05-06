@@ -1,3 +1,14 @@
+calculateCenter = (_id) ->
+  farm = Posts.findOne(_id)
+  geometry = farm.geometry
+  lnglats = _.map geometry.split(';'), (lnglatString) -> (_.map lnglatString.split(','), (str) -> parseFloat(str))
+  avglng = (_.reduce lnglats, ((memo, num) -> memo + num[0]), 0)/lnglats.length
+  avglat = (_.reduce lnglats, ((memo, num) -> memo + num[1]), 0)/lnglats.length
+  return {
+    lng: avglng
+    lat: avglat
+  }
+
 Router.map ->
   @route "home",
     path: "/"
@@ -46,6 +57,7 @@ Router.map ->
         Meteor.subscribe 'crops', this.params._id
         Meteor.subscribe 'activities', this.params._id
         Meteor.subscribe 'yields', this.params._id
+        Meteor.subscribe 'devices', calculateCenter(this.params._id)
       ]
     data: ->
       Posts.findOne(this.params._id)
