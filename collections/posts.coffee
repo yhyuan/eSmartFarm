@@ -24,10 +24,6 @@ Schemas.Posts = new SimpleSchema
 		autoValue: ->
 			calculateCenter (this.field('geometry').value)
 
-	deviceId:
-		type:String
-		optional:true
-
 	content:
 		type: String
 		label:  ->

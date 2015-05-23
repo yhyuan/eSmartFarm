@@ -295,6 +295,7 @@ Template.postSubmit.events({
         Session.set('addFieldStep', 'sixthStep');
         $("#" + Config.mapDivID).hide();
         $("#submitFarmBtn").toggle();
+        /*
         var lng = _.reduce(markers, function(total, makrer){ return total + makrer.getLatLng().lng; }, 0)/markers.length;
         var lat = _.reduce(markers, function(total, makrer){ return total + makrer.getLatLng().lat; }, 0)/markers.length;
         var deviceId = Devices.findOne({
@@ -310,7 +311,7 @@ Template.postSubmit.events({
             }
         }).deviceId;
         $('[name="deviceId"]').val(deviceId);
-
+*/
         var coordinates = _.map(markers, function(m) {
             return m.getLatLng().lng.toFixed(7) + ',' + m.getLatLng().lat.toFixed(7);
         });
