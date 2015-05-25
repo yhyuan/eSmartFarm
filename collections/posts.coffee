@@ -1,4 +1,22 @@
 @Posts = new Meteor.Collection('posts');
+
+SimpleSchema.messages
+	needsLatLong: '[label] should be of form [longitude, latitude]'
+	lonOutOfRange: '[label] longitude should be between -90 and 90'
+	latOutOfRange: '[label] latitude should be between -180 and 180'
+
+Schemas.Location = new SimpleSchema
+	type:
+		type: String,
+		allowedValues: ['Point']
+	coordinates:
+		type: [Number]
+		decimal: true
+		custom: ->
+			return "needsLatLong" unless @value.length is 2
+			return "lonOutOfRange" unless -180 <= @value[0] <= 180
+			return "latOutOfRange" unless -90 < @value[1] <= 90
+
 calculateCenter = (geometry) ->
 	lnglats = _.map geometry.split(';'), (lnglatString) -> (_.map lnglatString.split(','), (str) -> parseFloat(str))
 	avglng = (_.reduce lnglats, ((memo, num) -> memo + num[0]), 0)/lnglats.length

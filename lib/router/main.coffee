@@ -1,5 +1,3 @@
-getDeviceId = (_id) ->
-  Posts.findOne(_id).deviceId
 
 Router.map ->
   @route "home",
@@ -51,7 +49,6 @@ Router.map ->
         Meteor.subscribe 'crops', this.params._id
         Meteor.subscribe 'activities', this.params._id
         Meteor.subscribe 'yields', this.params._id
-        Meteor.subscribe 'hourlys', {deviceId:getDeviceId(this.params._id), options: {sort: {uploadTime: -1}, limit: 1}}
       ]
     data: ->
       Posts.findOne(this.params._id)
@@ -144,52 +141,30 @@ Router.map ->
 
   @route "airTemp36Hours",
     path: "/posts/:_id/airTemp36Hours"
-    waitOn: ->
-        Meteor.subscribe 'hourlys', {deviceId:getDeviceId(this.params._id), options: {fields: {airtemp: 1, uploadTime: 1}, sort: {uploadTime: -1}, limit: 36}}
     data: ->
       Posts.findOne(this.params._id)
 
   @route "airTemp72Hours",
     path: "/posts/:_id/airTemp72Hours"
-    waitOn: ->
-      [
-        Meteor.subscribe 'hourlys', {deviceId:getDeviceId(this.params._id), options: {fields: {airtemp: 1, uploadTime: 1}, sort: {uploadTime: -1}, limit: 72}}
-      ]
     data: ->
       Posts.findOne(this.params._id)
 
   @route "soilTemp36Hours",
     path: "/posts/:_id/soilTemp36Hours"
-    waitOn: ->
-      [
-        Meteor.subscribe 'hourlys', {deviceId:getDeviceId(this.params._id), options: {fields: {soiltemp: 1, uploadTime: 1}, sort: {uploadTime: -1}, limit: 36}}
-      ]
     data: ->
       Posts.findOne(this.params._id)
 
   @route "soilTemp72Hours",
     path: "/posts/:_id/soilTemp72Hours"
-    waitOn: ->
-      [
-        Meteor.subscribe 'hourlys', {deviceId:getDeviceId(this.params._id), options: {fields: {soiltemp: 1, uploadTime: 1}, sort: {uploadTime: -1}, limit: 72}}
-      ]
     data: ->
       Posts.findOne(this.params._id)
 
   @route "rainfall36Hours",
     path: "/posts/:_id/rainfall36Hours"
-    waitOn: ->
-      [
-        Meteor.subscribe 'hourlys', {deviceId:getDeviceId(this.params._id), options: {fields: {rainfall: 1, uploadTime: 1}, sort: {uploadTime: -1}, limit: 36}}
-      ]
     data: ->
       Posts.findOne(this.params._id)
 
   @route "rainfall72Hours",
     path: "/posts/:_id/rainfall72Hours"
-    waitOn: ->
-      [
-        Meteor.subscribe 'hourlys', {deviceId: getDeviceId(this.params._id), options: {fields: {rainfall: 1, uploadTime: 1}, sort: {uploadTime: -1}, limit: 72}}
-      ]
     data: ->
       Posts.findOne(this.params._id)
