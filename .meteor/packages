@@ -21,7 +21,6 @@ aldeed:template-extension
 cfs:graphicsmagick
 yogiben:helpers
 iron:router
-yogiben:autoform-modals
 yogiben:notifications
 yogiben:pretty-email
 yogiben:autoform-file
@@ -52,3 +51,4 @@ mdg:camera
 peernohell:c3
 gwendall:simple-schema-i18n
 http
+yhyuan-autoform-modals

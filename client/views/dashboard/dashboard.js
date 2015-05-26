@@ -1,19 +1,65 @@
+Template.registerHelper('deleteButtonContent', function() {
+    return TAPi18n.__('delete');
+});
+Template.registerHelper('cancelButtonContent', function() {
+    return TAPi18n.__('cancel');
+});
+
 Template.posts.helpers({
     isPostsZero: function() {
         return Posts.find().count() === 0;
-    },
-    deletePostTitle: function() {
-        return TAPi18n.__('deletePost'); //'删除农场';
-    },
-    deletePostButtonContent: function() {
-        return TAPi18n.__('delete');//'删除';
-    },
-    deletePostPrompt: function() {
-        return TAPi18n.__('confirmDelete');//"你确定要删除本农场？";
     }
 });
+Template.posts.created = function() {
+    _.each(Posts.find({}).fetch(), function(field) {        
+        Meteor.call('getMonitoringData', field.center, function (err, res) {
+          if (err) { 
+            Session.set('monitoring-' + field._id, {error: err});
+          } else {
+            Session.set('monitoring-' + field._id, res);
+            return res;
+          }
+        });
+        Meteor.call('getForecastingData', field.center, function (err, res) {
+          if (err) { 
+            Session.set('forecasting-' + field._id, {error: err});
+          } else {
+            Session.set('forecasting-' + field._id, res);
+            return res;
+          }
+        });
+    });
 
-Template.postSubmit.helpers({
+    Posts.find({}).observe({
+        added: function(field) {
+            console.log(field);
+            /*
+            var marker = new L.Marker(party.latlng, {
+              _id: party._id,
+              icon: createIcon(party)
+            }).on('click', function(e) {
+              Session.set("selected", e.target.options._id);
+            });      
+            addMarker(marker);
+            */
+        },
+        changed: function(field) {
+            console.log(field);
+            //var marker = markers[party._id];
+            //if (marker) marker.setIcon(createIcon(party));
+        },
+        removed: function(field) {
+            console.log(field);
+            //removeMarker(party._id);
+        }
+    });
+};
+
+Template.posts.rendered = function() {
+    console.log("Template.posts.rendered");
+};
+
+Template.fieldSubmit.helpers({
     addFieldStepIs: function(step) {
         return Session.get("addFieldStep") === step;
     }
@@ -266,6 +312,17 @@ Template.rainfall72Hours.rendered = chartCallback('rainfall');
 Template.postEdit.helpers({
     addFieldStepIs: function(step) {
         return Session.get("addFieldStep") === step;
+    },
+    deletePostTitle: function() {
+        return TAPi18n.__('deletePost'); //'删除农场';
+    },
+    deletePostPrompt: function() {
+        return TAPi18n.__('confirmDelete');//"你确定要删除本农场？";
+    },
+    deletePostCallback: function() {
+        return function() {
+            console.log("It is deleted.");
+        }
     }
 });
 
@@ -284,7 +341,7 @@ Template.postEdit.events({
     }
 });
 
-Template.postSubmit.events({
+Template.fieldSubmit.events({
     'click #addFieldStartButton': function(event, template) {
         Session.set('addFieldStep', 'secondStep');
     },

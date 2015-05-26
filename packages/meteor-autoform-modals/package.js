@@ -1,4 +1,5 @@
 Package.describe({
+  name: 'yhyuan-autoform-modals',
   summary: "Create, update and delete collections with modals",
   version: "0.3.5",
   git: "https://github.com/yogiben/meteor-autoform-modals"
@@ -20,6 +21,6 @@ Package.on_use(function (api) {
   ], 'client');
  
   api.add_files('lib/client/modals.html', 'client');
-  api.add_files('lib/client/modals.coffee', 'client');
+  api.add_files('lib/client/modals.js', 'client');
   api.add_files('lib/client/modals.less', 'client');
 });

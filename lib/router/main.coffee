@@ -37,13 +37,11 @@ Router.map ->
         @redirect '/dashboard'
       @next()
 
-  @route "postSubmit",
-    path: "/postSubmit"
-    waitOn: ->
-      Meteor.subscribe 'devices'
+  @route "fieldSubmit",
+    path: "/fieldSubmit"
 
   @route "postPage",
-    path: "/posts/:_id"
+    path: "/fields/:_id"
     waitOn: ->
       [
         Meteor.subscribe 'crops', this.params._id
