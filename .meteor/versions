@@ -8,8 +8,8 @@ alanning:roles@1.2.13
 aldeed:autoform@4.2.2
 aldeed:collection2@2.3.3
 aldeed:simple-schema@1.3.2
+aldeed:tabular@1.2.0
 aldeed:template-extension@3.4.3
-alethes:pages@1.7.2
 autoupdate@1.2.1
 base64@1.0.3
 binary-heap@1.0.3
@@ -41,6 +41,7 @@ cmather:handlebars-server@0.2.0
 coffeescript@1.0.6
 comments@0.1.0
 dburles:collection-helpers@1.0.3
+dburles:google-maps@1.0.9
 ddp@1.1.0
 deps@1.0.7
 ejson@1.0.6
@@ -82,6 +83,8 @@ manuelschoebel:ms-seo@0.4.1
 mdg:camera@1.1.4
 meteor@1.1.6
 meteor-platform@1.2.2
+meteorhacks:meteorx@1.0.2
+meteorhacks:unblock@1.1.0
 minifiers@1.1.5
 minimongo@1.0.8
 mobile-status-bar@1.0.3
@@ -89,7 +92,6 @@ momentjs:moment@2.10.3
 mongo@1.1.0
 mongo-livedata@1.0.8
 mpowaga:string-template@0.1.0
-mrt:googlemaps@0.1.1
 mrt:leaflet@0.3.8
 mrt:moment@2.8.1
 mrt:underscore-string-latest@2.3.3
@@ -130,9 +132,9 @@ user-thumbs@0.0.8
 webapp@1.2.0
 webapp-hashing@1.0.3
 weibo@1.1.3
-yogiben:admin@1.1.0
-yogiben:autoform-file@0.2.1
-yogiben:autoform-map@0.0.4
+yogiben:admin@1.1.2
+yogiben:autoform-file@0.2.5
+yogiben:autoform-map@0.1.1
 yogiben:autoform-modals@0.3.2
 yogiben:helpers@0.0.6
 yogiben:mixpanel@0.0.6
