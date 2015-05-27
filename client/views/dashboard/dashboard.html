@@ -125,7 +125,7 @@
 	                  <td>{{crop}}</td>
 	                  <td>{{year}}</td>
 	                  <td>
-	                  	{{#afModal formId="deleteCrop" title=deleteCropTitle buttonContent=deleteCropButtonContent class="btn btn-danger btn-sm" collection="Crops" operation="remove" doc=this._id prompt=deleteCropPrompt}}
+	                  	{{#afModal formId="deleteCrop" title=deleteCropTitle  buttonContent=deleteButtonContent closeButtonContent=cancelButtonContent class="btn btn-danger btn-sm" collection="Crops" operation="remove" doc=this._id prompt=deleteCropPrompt}}
 					  		{{_ "delete"}}
 						{{/afModal}}
 					</td>
@@ -214,7 +214,7 @@
 	                  <td>{{formatDate date}}</td>
 	                  <td>{{cropYear}}</td>
 	                  <td>
-	                  	{{#afModal formId="deleteActivity" title=deleteActivityTitle buttonContent=deleteActivityButtonContent class="btn btn-danger btn-sm" collection="Activities" operation="remove" doc=this._id prompt=deleteActivityPrompt}}
+	                  	{{#afModal formId="deleteActivity" title=deleteActivityTitle  buttonContent=deleteButtonContent closeButtonContent=cancelButtonContent class="btn btn-danger btn-sm" collection="Activities" operation="remove" doc=this._id prompt=deleteActivityPrompt}}
 					  		{{_ "delete"}}
 						{{/afModal}}
 					</td>
@@ -298,7 +298,7 @@
 	                  <td>{{cropYear}}</td>
 	                  <td>{{yields}}</td>
 	                  <td>
-	                  	{{#afModal formId="deleteYield" title=deleteYieldTitle buttonContent=deleteYieldButtonContent class="btn btn-danger btn-sm" collection="Yields" operation="remove" doc=this._id prompt=deleteYieldPrompt}}
+	                  	{{#afModal formId="deleteYield" title=deleteYieldTitle  buttonContent=deleteButtonContent closeButtonContent=cancelButtonContent class="btn btn-danger btn-sm" collection="Yields" operation="remove" doc=this._id prompt=deleteYieldPrompt}}
 					  		{{_ "delete"}}
 						{{/afModal}}
 					</td>

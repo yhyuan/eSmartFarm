@@ -4,6 +4,9 @@ Template.registerHelper('deleteButtonContent', function() {
 Template.registerHelper('cancelButtonContent', function() {
     return TAPi18n.__('cancel');
 });
+Template.registerHelper('SelectOne', function() {
+    return TAPi18n.__('SelectOne');
+});
 
 Template.posts.helpers({
     isPostsZero: function() {
@@ -25,6 +28,7 @@ Template.posts.created = function() {
             Session.set('forecasting-' + field._id, {error: err});
           } else {
             Session.set('forecasting-' + field._id, res);
+            //console.log(res);
             return res;
           }
         });
@@ -32,7 +36,7 @@ Template.posts.created = function() {
 
     Posts.find({}).observe({
         added: function(field) {
-            console.log(field);
+            //console.log(field);
             /*
             var marker = new L.Marker(party.latlng, {
               _id: party._id,
@@ -44,12 +48,12 @@ Template.posts.created = function() {
             */
         },
         changed: function(field) {
-            console.log(field);
+            //console.log(field);
             //var marker = markers[party._id];
             //if (marker) marker.setIcon(createIcon(party));
         },
         removed: function(field) {
-            console.log(field);
+            //console.log(field);
             //removeMarker(party._id);
         }
     });
@@ -79,9 +83,6 @@ Template.cropAdd.helpers({
             return {label: "" + year, value: year};
         });
     },
-    SelectOne: function() {
-        return TAPi18n.__('SelectOne');
-    },
     farmIdValue: function() {
         return this._id;
     }
@@ -103,9 +104,6 @@ Template.cropEdit.helpers({
     deleteCropTitle: function() {
         return TAPi18n.__('deleteCrop');
     },
-    deleteCropButtonContent: function() {
-        return TAPi18n.__('delete');//'删除';
-    },
     deleteCropPrompt: function() {
         return TAPi18n.__('confirmDeleteCrop');
     }
@@ -125,9 +123,6 @@ Template.activityAdd.helpers({
             });
         });
         return _.reduce(cropsList, function(memo, num){ return memo.concat(num); }, []);
-    },
-    SelectOne: function() {
-        return TAPi18n.__('SelectOne');
     },
     farmIdValue: function() {
         return this._id;
@@ -157,9 +152,6 @@ Template.activityEdit.helpers({
     deleteActivityTitle: function() {
         return TAPi18n.__('deleteActivity');
     },
-    deleteActivityButtonContent: function() {
-        return TAPi18n.__('delete');//'删除';
-    },
     deleteActivityPrompt: function() {
         return TAPi18n.__('confirmDeleteActivity');
     },
@@ -187,9 +179,6 @@ Template.yieldAdd.helpers({
             return {label: item, value: item};
         });
     },
-    SelectOne: function() {
-        return TAPi18n.__('SelectOne');
-    },
     farmIdValue: function() {
         return this._id;
     }
@@ -210,9 +199,6 @@ Template.yieldEdit.helpers({
     },
     deleteYieldTitle: function() {
         return TAPi18n.__('deleteYield');
-    },
-    deleteYieldButtonContent: function() {
-        return TAPi18n.__('delete');//'删除';
     },
     deleteYieldPrompt: function() {
         return TAPi18n.__('confirmDeleteYield');
@@ -254,22 +240,31 @@ Template.postPage.helpers({
         });
     },
     realtimeAirTemperature: function () {
-        return Hourlys.findOne().airtemp;
+        return _.max(Session.get('monitoring-' + this._id).hourly.data, function(item) {
+            return item.time;
+        }).temperature;
     },
     realtimePrecipitation: function () {
-        return Hourlys.findOne().rainfall;
+        return _.max(Session.get('monitoring-' + this._id).hourly.data, function(item) {
+            return item.time;
+        }).precipIntensity;
     },
     realtimeSoilTemperature: function () {
-        return Hourlys.findOne().soiltemp;
+        return _.max(Session.get('monitoring-' + this._id).hourly.data, function(item) {
+            return item.time;
+        }).soiltemp;
     }    
 });
 
-var chartCallback = function(type) {
-    var name = (type === 'rainfall') ? 'precipitation' : 'temperature';
+var chartCallback = function(type, count) {
+    var name = (type === 'precipIntensity') ? 'precipitation' : 'temperature';
     return function () {
-        var hourlyData = Hourlys.find().fetch();
+        var hourlyData = Session.get('monitoring-' + this.data._id).hourly.data;
+        hourlyData = _.sortBy(hourlyData, function(item){ return -item.time;});
+        hourlyData = hourlyData.slice(0, count);
         var data = ([TAPi18n.__(name)]).concat(_.map(hourlyData, function(item){return item[type];}));
-        var convertTime = function(time) {
+        var convertTime = function(unix_timestamp) {
+            var time = new Date(unix_timestamp*1000);
             var yyyy = time.getFullYear().toString();
             var mm = (time.getMonth()+1).toString(); // getMonth() is zero-based
             var dd  = time.getDate().toString();
@@ -278,7 +273,9 @@ var chartCallback = function(type) {
             var ss  = time.getSeconds().toString();
             return yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]) + ' ' + (hh[1]?hh:"0"+hh[0]) + ':' + (MM[1]?MM:"0"+MM[0]) + ':' + (ss[1]?ss:"0"+ss[0]); // padding        
         };
-        var hours = (['x']).concat(_.map(hourlyData, function(item){return convertTime(item.uploadTime);}));
+        console.log(data);
+        console.log(hourlyData);
+        var hours = (['x']).concat(_.map(hourlyData, function(item){return convertTime(item.time);}));
         var chart = c3.generate({
             data: {
                 x: 'x',
@@ -300,14 +297,14 @@ var chartCallback = function(type) {
     };
 };
 
-Template.airTemp36Hours.rendered = chartCallback('airtemp');
-Template.airTemp72Hours.rendered = chartCallback('airtemp');
+Template.airTemp36Hours.rendered = chartCallback('temperature', 36);
+Template.airTemp72Hours.rendered = chartCallback('temperature', 72);
 
-Template.soilTemp36Hours.rendered = chartCallback('soiltemp');
-Template.soilTemp72Hours.rendered = chartCallback('soiltemp');
+Template.soilTemp36Hours.rendered = chartCallback('soiltemp', 36);
+Template.soilTemp72Hours.rendered = chartCallback('soiltemp', 72);
 
-Template.rainfall36Hours.rendered = chartCallback('rainfall');
-Template.rainfall72Hours.rendered = chartCallback('rainfall');
+Template.rainfall36Hours.rendered = chartCallback('precipIntensity', 36);
+Template.rainfall72Hours.rendered = chartCallback('precipIntensity', 72);
 
 Template.postEdit.helpers({
     addFieldStepIs: function(step) {
